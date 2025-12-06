@@ -139,13 +139,13 @@ const ResearchAreas = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-purple-800">
               <tr>
-                <th className="px-3 py-2 text-left text-sm font-medium text-white uppercase tracking-wider">
+                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
                   Name
                 </th>
-                <th className="px-3 py-2 text-left text-sm font-medium text-white uppercase tracking-wider">
+                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
                   Department
                 </th>
-                <th className="px-3 py-2 text-left text-sm font-medium text-white uppercase tracking-wider">
+                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
                   Areas of Interest
                 </th>
               </tr>
@@ -230,7 +230,7 @@ const ResearchAreas = () => {
           smooth={true}
           offset={-100}
           duration={500}
-          className="fixed bottom-6 right-6 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 cursor-pointer z-50"
+          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
         >
           ↑
         </Link>
@@ -240,3 +240,6 @@ const ResearchAreas = () => {
 };
 
 export default ResearchAreas;
+
+
+

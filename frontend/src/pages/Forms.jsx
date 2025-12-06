@@ -45,13 +45,13 @@ export default function Forms() {
 
   return (
     <div id='forms-top' className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 text-gray-800">
-      <h1 className="text-3xl sm:text-3xl font-bold mb-4 text-center">R&D Forms</h1>
-      <div className="mb-4 text-center">
+      <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">R&D Forms</h1>
+      <div className="mb-6 text-center">
         <a
           href="https://drive.google.com/drive/u/2/folders/1EQ8rYC1ccBZHYn7UreO3Pn9TIUoCHF_Y"
           target="_blank"
           rel="noopener noreferrer"
-          className="underline hover:text-purple-900 text-purple-700 text-sm sm:text-base font-medium"
+          className="underline hover:text-purple-900 text-purple-700 text-base md:text-lg font-medium"
         >
           View all forms
         </a>
@@ -80,7 +80,7 @@ export default function Forms() {
                     <th
                       key={i}
                       scope="col"
-                      className="px-3 py-3 text-left text-m font-medium text-white uppercase tracking-wider"
+                      className="px-3 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide"
                     >
                       {col}
                     </th>
@@ -108,7 +108,7 @@ export default function Forms() {
                             rel="noopener noreferrer"
                             className={`underline ${
                               col.toLowerCase().includes("pdf")
-                                ? "text-blue-700 hover:text-purple-900"
+                                ? "text-purple-700 hover:text-purple-900"
                                 : "text-purple-700 hover:text-purple-900"
                             }`}
                           >
@@ -134,7 +134,7 @@ export default function Forms() {
                             smooth={true}
                             offset={-100}
                             duration={500}
-                            className="fixed bottom-6 right-6 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 cursor-pointer z-50"
+                            className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
                         >
                             ↑
                         </Link>
@@ -142,3 +142,6 @@ export default function Forms() {
     </div>
   );
 }
+
+
+

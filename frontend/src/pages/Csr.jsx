@@ -84,10 +84,10 @@ export default function Csr() {
                 >
                   <td className="px-3 py-4 whitespace-normal text-sm font-medium text-gray-900 text-left">{index + 1}</td>
                   <td className="px-3 py-4 whitespace-normal text-sm font-medium text-gray-900 text-left">{form.name}</td>
-                  <td className="px-3 py-4 whitespace-normal text-sm text-blue-700 text-left">
+                  <td className="px-3 py-4 whitespace-normal text-sm text-purple-700 text-left">
                     <button
                       onClick={() => handleViewClick(form.wordLink)}
-                      className="underline hover:text-blue-900 cursor-pointer"
+                      className="underline hover:text-purple-900 cursor-pointer"
                     >
                       View
                     </button>
@@ -104,3 +104,6 @@ export default function Csr() {
     </div>
   );
 }
+
+
+

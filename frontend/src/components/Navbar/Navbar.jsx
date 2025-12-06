@@ -25,7 +25,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Home
@@ -34,7 +34,7 @@ const Navbar = ({ closeMenu }) => {
                 {/* <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/message"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Message from Dean
@@ -43,7 +43,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/people"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         People
@@ -53,12 +53,21 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/Documents"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
 
                        Documents
 
+                    </NavLink>
+                </li>
+                <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
+                    <NavLink
+                        to="/opportunities"
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
+                        onClick={handleLinkClick}
+                    >
+                        Call for Proposals
                     </NavLink>
                 </li>
                 <MyDropdownNav/>
@@ -68,7 +77,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     {/* <NavLink
                         to="/csr"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         CSR Donations
@@ -86,7 +95,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/forms"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Forms
@@ -95,7 +104,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/research-areas"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Research Areas
@@ -104,7 +113,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/Labs/cse"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Labs
@@ -114,7 +123,7 @@ const Navbar = ({ closeMenu }) => {
                {/* <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/deans"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Deans
@@ -123,7 +132,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/feedback"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Feedback
@@ -133,7 +142,7 @@ const Navbar = ({ closeMenu }) => {
                 <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/patents"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Patents
@@ -142,7 +151,7 @@ const Navbar = ({ closeMenu }) => {
                  <li className='rounded-lg hover:bg-slate-100 transition-all duration-200'>
                     <NavLink
                         to="/publications"
-                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                        className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                         onClick={handleLinkClick}
                     >
                         Publications

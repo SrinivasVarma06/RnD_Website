@@ -18,8 +18,8 @@ const NavCard = ({ title, icon, targetId }) => {
       duration={500}
       className="cursor-pointer"
     >
-      <div className="bg-white rounded-lg shadow-md p-5 text-center hover:shadow-lg transition-shadow duration-300 hover:bg-indigo-50 h-full flex flex-col items-center justify-center">
-        <div className="text-indigo-600 mb-3 text-3xl">
+      <div className="bg-white rounded-lg shadow-md p-5 text-center hover:shadow-lg transition-shadow duration-300 hover:bg-purple-50 h-full flex flex-col items-center justify-center">
+        <div className="text-purple-600 mb-3 text-3xl">
           {icon}
         </div>
         <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
@@ -33,7 +33,7 @@ const NavCard = ({ title, icon, targetId }) => {
 const Section = ({ id, title, children }) => {
   return (
     <div id={id} className="py-10 scroll-mt-[100px]">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">{title}</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">{title}</h2>
       {children}
     </div>
   );
@@ -42,7 +42,7 @@ const Section = ({ id, title, children }) => {
 const SubSection = ({ title, children }) => {
   return (
     <div className="py-6">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4 pb-1 border-b border-gray-200">{title}</h3>
+      <h3 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 pb-1 border-b border-gray-200">{title}</h3>
       {children}
     </div>
   );
@@ -69,7 +69,7 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
             }}
           />
         ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 text-indigo-300" fill="currentColor" viewBox="0 0 24 24">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
             <path
               fillRule="evenodd"
               d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 
@@ -84,7 +84,7 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
       {/* Text Section */}
       <div className="p-4 flex-grow">
         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
-        <p className="text-indigo-600 font-medium">
+        <p className="text-purple-600 font-medium">
           {title.split('//').map((line, index) => (
             <React.Fragment key={index}>
               {line}
@@ -110,7 +110,7 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
         {email && (
           <div className="flex items-center text-sm text-gray-700">
             <Mail className="w-4 h-4 mr-2 text-gray-500" />
-            <a href={`mailto:${email}`} className="text-indigo-600 hover:underline truncate">
+            <a href={`mailto:${email}`} className="text-purple-600 hover:underline truncate">
               {email}
             </a>
           </div>
@@ -119,7 +119,7 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
         {website && (
           <div className="flex items-center text-sm text-gray-700">
             <Globe className="w-4 h-4 mr-2 text-gray-500" />
-            <a href={website} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline truncate">
+            <a href={website} target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:underline truncate">
               Website
             </a>
           </div>
@@ -152,7 +152,7 @@ const StaffCard = ({ name, title, imageUrl, email }) => {
                 }}
               />
             ) : null}
-            <div className={`text-4xl text-indigo-200 ${imageUrl ? 'hidden' : ''}`}>
+            <div className={`text-4xl text-purple-200 ${imageUrl ? 'hidden' : ''}`}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
                 <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
               </svg>
@@ -161,7 +161,7 @@ const StaffCard = ({ name, title, imageUrl, email }) => {
         </div>
         <div className="min-w-0">
           <h3 className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
-          <p className="text-indigo-600 truncate">{title}</p>
+          <p className="text-purple-600 truncate">{title}</p>
         </div>
       </div>
       <div className="p-4 bg-gray-50 text-sm flex-grow">
@@ -171,7 +171,7 @@ const StaffCard = ({ name, title, imageUrl, email }) => {
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
             </svg>
-            <a href={`mailto:${email}`} className="text-indigo-600 hover:underline truncate">{email}</a>
+            <a href={`mailto:${email}`} className="text-purple-600 hover:underline truncate">{email}</a>
           </div>
         )}
       </div>
@@ -273,8 +273,8 @@ const People = () => {
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Page Title */}
       <div id="people-top" className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">People</h1>
-        <p className="text-gray-600">
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-3">People</h1>
+        <p className="text-gray-600 text-base md:text-lg">
           Meet the Dean, Associate Dean, faculty Incharge and staff of the Research and Development Section.
         </p>
       </div>
@@ -364,7 +364,7 @@ const People = () => {
           smooth={true}
           offset={-100}
           duration={500}
-          className="fixed bottom-6 right-6 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 cursor-pointer z-50"
+          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
         >
           ↑
         </Link>
@@ -374,3 +374,6 @@ const People = () => {
 };
 
 export default People;
+
+
+

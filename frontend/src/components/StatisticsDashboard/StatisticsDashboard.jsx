@@ -1,0 +1,269 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Briefcase, TrendingUp, Target, BookOpen, Users, Award, FileText, IndianRupee } from 'lucide-react';
+
+const STRAPI_BASE = 'https://rnd.iitdh.ac.in/strapi/api';
+
+// Google Sheets URLs
+const SHEETS = {
+  consultancy: 'https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1',
+  sponsored: 'https://opensheet.elk.sh/1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o/Sheet1',
+  csrProjects: 'https://opensheet.vercel.app/1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM/Sheet1',
+  publications: 'https://opensheet.vercel.app/10P7vgxarVBixJkawH_SrFf3FaITKWeNLkc2rwPj0aoo/Sheet1',
+  patents: 'https://opensheet.vercel.app/1GwrkMQ6uIeKmUU8yhEpZce-cTnGDcvNlj6KwYR6CrBE/Sheet1',
+};
+
+// Animated counter hook
+const useCountUp = (end, duration = 2000, start = 0) => {
+  const [count, setCount] = useState(start);
+  const countRef = useRef(start);
+  const frameRef = useRef();
+
+  useEffect(() => {
+    if (end === 0) {
+      setCount(0);
+      return;
+    }
+
+    const startTime = performance.now();
+    const startValue = countRef.current;
+
+    const animate = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(startValue + (end - startValue) * easeOutQuart);
+      
+      setCount(currentCount);
+      countRef.current = currentCount;
+
+      if (progress < 1) {
+        frameRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    frameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [end, duration]);
+
+  return count;
+};
+
+// Stat Card Component
+const StatCard = ({ icon: Icon, label, value, subValue, color, isLoading }) => {
+  const animatedValue = useCountUp(value, 1500);
+
+  return (
+    <div className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border-l-4 ${color}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <p className="text-gray-600 text-base md:text-lg font-medium mb-2">{label}</p>
+          {isLoading ? (
+            <div className="h-12 w-28 bg-gray-200 animate-pulse rounded"></div>
+          ) : (
+            <p style={{ fontSize: '30px', fontWeight: 'bold', color: '#1f2937' }}>
+              {animatedValue.toLocaleString('en-IN')}
+            </p>
+          )}
+          {subValue && !isLoading && (
+            <p className="text-lg md:text-xl text-gray-500 mt-2">{subValue}</p>
+          )}
+        </div>
+        <div className={`p-4 rounded-full bg-opacity-10 ${color.replace('border-', 'bg-')}`}>
+          <Icon size={40} className={color.replace('border-', 'text-').replace('-500', '-600')} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
+  const [stats, setStats] = useState({
+    consultancy: { count: 0, value: 0 },
+    sponsored: { count: 0, value: 0 },
+    csrProjects: { count: 0, value: 0 },
+    publications: 0,
+    patents: 0,
+    faculty: 0,
+    researchAreas: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+
+      // Fetch from Google Sheets (parallel)
+      const [consultancyRes, sponsoredRes, csrRes, publicationsRes, patentsRes] = await Promise.all([
+        fetch(SHEETS.consultancy).then(r => r.json()).catch(() => []),
+        fetch(SHEETS.sponsored).then(r => r.json()).catch(() => []),
+        fetch(SHEETS.csrProjects).then(r => r.json()).catch(() => []),
+        fetch(SHEETS.publications).then(r => r.json()).catch(() => []),
+        fetch(SHEETS.patents).then(r => r.json()).catch(() => []),
+      ]);
+
+      // Fetch from Strapi (parallel)
+      const [peopleRes, researchAreasRes] = await Promise.all([
+        fetch(`${STRAPI_BASE}/people?pagination[pageSize]=1`).then(r => r.json()).catch(() => ({ meta: { pagination: { total: 0 } } })),
+        fetch(`${STRAPI_BASE}/research-areas?pagination[pageSize]=1`).then(r => r.json()).catch(() => ({ meta: { pagination: { total: 0 } } })),
+      ]);
+
+      // Calculate consultancy stats
+      let consultancyValue = 0;
+      consultancyRes.forEach(item => {
+        const val = parseFloat(item["Value (₹1,00,000)"]) * 100000;
+        if (!isNaN(val)) consultancyValue += val;
+      });
+
+      // Calculate sponsored stats
+      let sponsoredValue = 0;
+      sponsoredRes.forEach(item => {
+        const val = parseInt(item["Value (₹1,00,000)"]) * 100000;
+        if (!isNaN(val)) sponsoredValue += val;
+      });
+
+      // Calculate CSR stats
+      let csrValue = 0;
+      csrRes.forEach(item => {
+        const val = parseFloat(item["Value (₹1,00,000)"]) * 100000;
+        if (!isNaN(val)) csrValue += val;
+      });
+
+      setStats({
+        consultancy: { count: consultancyRes.length, value: consultancyValue },
+        sponsored: { count: sponsoredRes.length, value: sponsoredValue },
+        csrProjects: { count: csrRes.length, value: csrValue },
+        publications: publicationsRes.length,
+        patents: patentsRes.length,
+        faculty: peopleRes?.meta?.pagination?.total || 0,
+        researchAreas: researchAreasRes?.meta?.pagination?.total || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching statistics:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(fetchStats, refreshInterval);
+    return () => clearInterval(interval);
+  }, [refreshInterval]);
+
+  const totalProjects = stats.consultancy.count + stats.sponsored.count + stats.csrProjects.count;
+  const totalFunding = stats.consultancy.value + stats.sponsored.value + stats.csrProjects.value;
+
+  return (
+    <div className="w-full py-8 px-4">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto mb-10">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
+              Research at a Glance
+            </h2>
+            <p className="text-gray-600 text-sm md:text-base mt-2">
+              Live statistics from our research database
+            </p>
+          </div>
+          <button
+            onClick={fetchStats}
+            disabled={loading}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium disabled:opacity-50"
+          >
+            {loading ? 'Updating...' : 'Refresh'}
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <StatCard
+          icon={Briefcase}
+          label="Consultancy Projects"
+          value={stats.consultancy.count}
+          subValue={`₹${(stats.consultancy.value / 10000000).toFixed(2)} Cr`}
+          color="border-purple-500"
+          isLoading={loading}
+        />
+        <StatCard
+          icon={TrendingUp}
+          label="Sponsored Projects"
+          value={stats.sponsored.count}
+          subValue={`₹${(stats.sponsored.value / 10000000).toFixed(2)} Cr`}
+          color="border-purple-500"
+          isLoading={loading}
+        />
+        <StatCard
+          icon={Target}
+          label="CSR Projects"
+          value={stats.csrProjects.count}
+          subValue={`₹${(stats.csrProjects.value / 10000000).toFixed(2)} Cr`}
+          color="border-green-500"
+          isLoading={loading}
+        />
+        <StatCard
+          icon={BookOpen}
+          label="Publications"
+          value={stats.publications}
+          color="border-orange-500"
+          isLoading={loading}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <StatCard
+          icon={Award}
+          label="Patents"
+          value={stats.patents}
+          color="border-red-500"
+          isLoading={loading}
+        />
+        <StatCard
+          icon={Users}
+          label="R&D Team Members"
+          value={stats.faculty}
+          color="border-teal-500"
+          isLoading={loading}
+        />
+        <StatCard
+          icon={FileText}
+          label="Research Areas"
+          value={stats.researchAreas}
+          color="border-purple-500"
+          isLoading={loading}
+        />
+      </div>
+
+      {/* Summary Banner */}
+      <div className="max-w-7xl mx-auto">
+        <div className="rounded-xl p-8 md:p-10 text-white shadow-lg" style={{ background: 'linear-gradient(to right, #7c3aed, #9333ea)' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center md:text-left">
+              <p className="text-lg md:text-xl font-medium mb-3" style={{ color: '#c7d2fe' }}>Total Research Projects</p>
+              <p style={{ fontSize: '30px', fontWeight: 'bold', color: 'white' }}>
+                {loading ? '...' : totalProjects.toLocaleString('en-IN')}
+              </p>
+            </div>
+            <div className="text-center md:text-left">
+              <p className="text-lg md:text-xl font-medium mb-3" style={{ color: '#c7d2fe' }}>Total Research Funding</p>
+              <p style={{ fontSize: '30px', fontWeight: 'bold', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <IndianRupee size={32} />
+                {loading ? '...' : `${(totalFunding / 10000000).toFixed(2)} Cr`}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StatisticsDashboard;

@@ -29,7 +29,7 @@ const Carousel = () => {
           <button
             key={index}
             type="button"
-            className={`w-3 h-3 bg-white rounded-full dark:bg-gray-800 ${currentSlide === index ? 'bg-blue-500' : ''}`}
+            className={`w-3 h-3 bg-white rounded-full dark:bg-gray-800 ${currentSlide === index ? 'bg-purple-500' : ''}`}
             onClick={() => setCurrentSlide(index)}
             aria-label={`Slide ${index + 1}`}
           ></button>

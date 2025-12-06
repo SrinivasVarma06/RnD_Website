@@ -71,7 +71,7 @@ const Stats = () => {
 
                             to="/statistics/projects"
 
-                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                             onClick={handleLinkClick}
                         >
                             Projects
@@ -80,14 +80,14 @@ const Stats = () => {
 
                             to="/statistics/Office"
 
-                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                             onClick={handleLinkClick}
                         >
                             Office
                         </NavLink> */}
                         <NavLink
                             to="/statistics/publications"
-                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-indigo-600' : 'text-gray-700'}`}
+                            className={({ isActive }) => `py-2 rounded-lg pl-3 font-medium block w-full ${isActive ? 'bg-slate-100 text-purple-600' : 'text-gray-700'}`}
                             onClick={handleLinkClick}
                         >
                             Publications

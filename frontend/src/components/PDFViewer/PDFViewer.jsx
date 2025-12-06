@@ -97,7 +97,7 @@ const PDFViewer = ({ pdfFile }) => {
                 href={absolutePdfUrl} 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-indigo-600 hover:text-indigo-800 ml-1"
+                className="text-purple-600 hover:text-purple-800 ml-1"
               >
                 Click here to download the PDF file.
               </a>
@@ -109,7 +109,7 @@ const PDFViewer = ({ pdfFile }) => {
             href={absolutePdfUrl} 
             target="_blank"
             rel="noopener noreferrer"
-            className="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center"
+            className="text-purple-600 hover:text-purple-800 font-medium inline-flex items-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -130,7 +130,7 @@ const PDFViewer = ({ pdfFile }) => {
     <div className="pdf-viewer" ref={containerRef}>
       {loading && (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
       )}
 
@@ -141,7 +141,7 @@ const PDFViewer = ({ pdfFile }) => {
           onLoadError={onDocumentLoadError}
           loading={
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
             </div>
           }
           className="flex flex-col items-center"
@@ -168,14 +168,14 @@ const PDFViewer = ({ pdfFile }) => {
             <button
               onClick={goToPreviousPage}
               disabled={pageNumber <= 1}
-              className="px-3 py-1 bg-indigo-600 text-white rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 bg-purple-600 text-white rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Previous
             </button>
             <button
               onClick={goToNextPage}
               disabled={pageNumber >= numPages}
-              className="px-3 py-1 bg-indigo-600 text-white rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="px-3 py-1 bg-purple-600 text-white rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Next
             </button>
@@ -185,7 +185,7 @@ const PDFViewer = ({ pdfFile }) => {
               href={absolutePdfUrl} 
               target="_blank"
               rel="noopener noreferrer"
-              className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
+              className="text-purple-600 hover:text-purple-800 font-medium flex items-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -194,7 +194,7 @@ const PDFViewer = ({ pdfFile }) => {
             </a>
             <button
               onClick={switchToFallback}
-              className="text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
+              className="text-purple-600 hover:text-purple-800 font-medium flex items-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8v4m0 4h.01M8.438 4.952l-.707.707M15.569 4.952l.707.707M9 12a3 3 0 11 6 0 3 3 0 01-6 0z" />

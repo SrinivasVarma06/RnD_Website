@@ -129,7 +129,7 @@ const Patents = () => {
                                             smooth={true}
                                             offset={-100}
                                             duration={500}
-                                            className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                                            className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300"
                                         >
                                             Back to Top
                                         </Link>
@@ -139,3 +139,5 @@ const Patents = () => {
 };
 
 export default Patents;
+
+

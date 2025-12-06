@@ -158,7 +158,7 @@ const SHEET_API_URL = "https://opensheet.elk.sh/1HzVcvQzqZaF1Wdlv4e1mIOHbs4O4lLk
         {item["Other Faculty Members"]||"-"}
       </td>
       <td className="px-3 py-4 whitespace-normal text-sm text-gray-700">
-    {item["Website"]!=undefined && <a className="blue" href={item["Website"]} target="_blank">Link</a>}
+    {item["Website"]!=undefined && <a className="purple-link" href={item["Website"]} target="_blank">Link</a>}
       </td>
       
     </tr>
@@ -175,7 +175,7 @@ const SHEET_API_URL = "https://opensheet.elk.sh/1HzVcvQzqZaF1Wdlv4e1mIOHbs4O4lLk
                     smooth={true}
                     offset={-100}
                     duration={500}
-                    className="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+                    className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300"
                 >
                     Back to Top
                 </Link>

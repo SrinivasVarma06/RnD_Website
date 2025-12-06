@@ -47,13 +47,13 @@ export default function Documents() {
 
   return (
     <div id='doc-top' className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 text-gray-800">
-      <h1 className="text-3xl sm:text-3xl font-bold mb-4 text-center">Documents</h1>
-      <div className="mb-4 text-center">
+      <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">Documents</h1>
+      <div className="mb-6 text-center">
         <a
           href="https://drive.google.com/drive/folders/1NsW2cChEMUG-sgS4VGh2_FWI9HOU_Nar?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
-          className="underline hover:text-purple-900 text-purple-700 text-sm sm:text-base font-medium"
+          className="underline hover:text-purple-900 text-purple-700 text-base md:text-lg font-medium"
         >
           View all documents
         </a>
@@ -99,7 +99,7 @@ export default function Documents() {
           smooth={true}
           offset={-100}
           duration={500}
-          className="fixed bottom-6 right-6 bg-indigo-600 text-white p-3 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 cursor-pointer z-50"
+          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
         >
           ↑
         </Link>
@@ -107,3 +107,6 @@ export default function Documents() {
     </div>
   );
 }
+
+
+

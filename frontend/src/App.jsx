@@ -46,6 +46,7 @@ const Cheeng=lazy(()=>import ('./pages/labs/chemicaleng'))
 const Civil=lazy(()=>import('./pages/labs/civil'))
 const Eece=lazy(()=>import('./pages/labs/ece'))
 const Feedback= lazy(() => import('./pages/feedback'));
+const Opportunities = lazy(() => import('./pages/Opportunities'));
 
 // ScrollToTop logic inside App.jsx
 function ScrollToTop() {
@@ -95,6 +96,11 @@ function App() {
             {isLabsPage && <LabSubNavbar />}
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/opportunities" element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <Opportunities />
+                </Suspense>
+              } />
               <Route path="/forms" element={
                 <Suspense fallback={<PageSkeleton />}>
                   <Forms />

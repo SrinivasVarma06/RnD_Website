@@ -58,7 +58,7 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
         <h1
           onClick={()=> navigate('/')}
           // Added '!' prefix to make these styles important
-          className="cursor-pointer !text-[0.9rem] md:!text-[1.1rem] lg:!text-[1.2rem] !font-semibold !text-[#1a1a1a] !tracking-wide !text-center"
+          className="cursor-pointer !text-base md:!text-lg lg:!text-xl !font-bold !text-gray-800 !tracking-wide !text-center"
         >
           Research and Development Section
         </h1>
@@ -69,7 +69,7 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
         <h1
           onClick={()=> navigate('/')}
           // Added '!' prefix to make these styles important
-          className="cursor-pointer !text-[0.65rem] !font-semibold !text-[#1a1a1a] !tracking-wide !text-center"
+          className="cursor-pointer !text-xs !font-semibold !text-gray-800 !tracking-wide !text-center"
         >
           Research and Development Section
         </h1>
