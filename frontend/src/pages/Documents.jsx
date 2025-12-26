@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-scroll';
 
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 
@@ -91,19 +90,6 @@ export default function Documents() {
             </div>
         </div>
       )}
-      {/* Back to Top Button */}
-      <div className="cursor-pointer text-center mt-10">
-        <Link
-          to="doc-top"
-          spy={true}
-          smooth={true}
-          offset={-100}
-          duration={500}
-          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
-        >
-          ↑
-        </Link>
-      </div>
     </div>
   );
 }

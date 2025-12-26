@@ -355,20 +355,6 @@ const People = () => {
       <Section id="Former-Deans" title="Former Deans">
         <Deans />
       </Section>
-
-      {/* Back to Top Button */}
-      <div className="cursor-pointer text-center mt-10">
-        <Link
-          to="people-top"
-          spy={true}
-          smooth={true}
-          offset={-100}
-          duration={500}
-          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
-        >
-          ↑
-        </Link>
-      </div>
     </div>
   );
 };

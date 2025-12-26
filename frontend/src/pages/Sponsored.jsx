@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
-import { Link } from 'react-scroll';
 import { Search, TrendingUp, IndianRupee, Calendar, Clock, CheckCircle2 } from 'lucide-react';
 import './searchresults.css';
 
@@ -312,18 +311,6 @@ export default function Sponsored() {
         totalItems={processedData.length}
         itemsPerPage={itemsPerPage}
       />
-
-      {/* Back to Top Button */}
-      <Link
-        to="spon-top"
-        spy={true}
-        smooth={true}
-        offset={-100}
-        duration={500}
-        className="fixed bottom-6 right-6 bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-800 transition duration-300 cursor-pointer z-50"
-      >
-        ↑
-      </Link>
     </div>
   );
 }

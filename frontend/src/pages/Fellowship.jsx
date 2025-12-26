@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-import { Link } from 'react-scroll';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import { Search, Award, IndianRupee, Calendar, Clock, CheckCircle2, User } from 'lucide-react';
 
@@ -301,9 +300,6 @@ export default function Fellowship() {
             </div>
 
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} totalItems={processedData.length} itemsPerPage={itemsPerPage} />
-
-            <Link to="fellowship-top" spy={true} smooth={true} offset={-100} duration={500}
-                className="fixed bottom-6 right-6 bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-800 transition duration-300 cursor-pointer z-50">↑</Link>
         </div>
     );
 }

@@ -3,7 +3,6 @@ import { Briefcase, TrendingUp, Target, BookOpen, Users, Award, FileText, Indian
 
 const STRAPI_BASE = 'https://rnd.iitdh.ac.in/strapi/api';
 
-// Google Sheets URLs
 const SHEETS = {
   consultancy: 'https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1',
   sponsored: 'https://opensheet.elk.sh/1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o/Sheet1',
@@ -12,7 +11,6 @@ const SHEETS = {
   patents: 'https://opensheet.vercel.app/1GwrkMQ6uIeKmUU8yhEpZce-cTnGDcvNlj6KwYR6CrBE/Sheet1',
 };
 
-// Animated counter hook
 const useCountUp = (end, duration = 2000, start = 0) => {
   const [count, setCount] = useState(start);
   const countRef = useRef(start);
@@ -162,24 +160,11 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
 
   return (
     <div className="w-full py-8 px-4">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto mb-10">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
-              Research at a Glance
-            </h2>
-            <p className="text-gray-600 text-sm md:text-base mt-2">
-              Live statistics from our research database
-            </p>
-          </div>
-          <button
-            onClick={fetchStats}
-            disabled={loading}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium disabled:opacity-50"
-          >
-            {loading ? 'Updating...' : 'Refresh'}
-          </button>
+      <div className="max-w-7xl mx-auto mb-10 px-4 py-8 bg-gradient-to-r from-purple-700 to-purple-900 rounded-lg shadow-lg">
+        <div className="text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-white">
+            Research at a Glance
+          </h2>
         </div>
       </div>
 

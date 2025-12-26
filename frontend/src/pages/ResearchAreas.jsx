@@ -7,7 +7,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-import { Link } from 'react-scroll';
 
 const normalize = (str) => str?.toLowerCase().replace(/\s+/g, '') || '';
 
@@ -222,19 +221,6 @@ const ResearchAreas = () => {
           </button>
         </div>
       )}
-      {/* Back to Top Button */}
-      <div className="cursor-pointer text-center mt-10">
-        <Link
-          to="research-top"
-          spy={true}
-          smooth={true}
-          offset={-100}
-          duration={500}
-          className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
-        >
-          ↑
-        </Link>
-      </div>
     </div>
   );
 };

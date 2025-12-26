@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-import { Link } from 'react-scroll';
 import axios from 'axios';
 import "./searchresults.css"
 

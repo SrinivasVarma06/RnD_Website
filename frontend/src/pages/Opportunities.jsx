@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-import { Link } from 'react-scroll';
 
 const CACHE_KEY = 'cachedOpportunities';
 const CACHE_TIMESTAMP_KEY = 'opportunitiesCacheTimestamp';
@@ -110,20 +109,6 @@ const Opportunities = () => {
                         </table>
                     </div>
                 )}
-            </div>
-
-            {/* Back to Top Button */}
-            <div className="cursor-pointer text-center mt-10">
-                <Link
-                    to="opportunities-top"
-                    spy={true}
-                    smooth={true}
-                    offset={-100}
-                    duration={500}
-                    className="fixed bottom-6 right-6 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition duration-300 cursor-pointer z-50"
-                >
-                    ↑
-                </Link>
             </div>
         </>
     );

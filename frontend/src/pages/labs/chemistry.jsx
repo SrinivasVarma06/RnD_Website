@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-scroll';
 import PageSkeleton from "../..//components/LoadingSkeleton/PageSkeleton" 
 import {
   Typography,
@@ -166,19 +165,6 @@ const SHEET_API_URL = "https://opensheet.elk.sh/1WhxVoG-kv62pww7y_GY0LrkNi0YLyUN
 </tbody>
 
                 </table>
-            </div>
-            {/* Back to Top Button */}
-            <div className="cursor-pointer text-center mt-10">
-                <Link
-                    to="consultancy-top"
-                    spy={true}
-                    smooth={true}
-                    offset={-100}
-                    duration={500}
-                    className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300"
-                >
-                    Back to Top
-                </Link>
             </div>
         </div>
         </Box>

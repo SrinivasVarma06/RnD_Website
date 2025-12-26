@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
-import { Link } from 'react-scroll';
 import axios from 'axios';
 import { Search, Target, IndianRupee, Calendar, Clock, CheckCircle2 } from 'lucide-react';
 import './searchresults.css';
@@ -302,18 +301,6 @@ export default function CSR() {
         totalItems={processedData.length}
         itemsPerPage={itemsPerPage}
       />
-
-      {/* Back to Top Button */}
-      <Link
-        to="csrProject-top"
-        spy={true}
-        smooth={true}
-        offset={-100}
-        duration={500}
-        className="fixed bottom-6 right-6 bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-800 transition duration-300 cursor-pointer z-50"
-      >
-        ↑
-      </Link>
     </div>
   );
 }
