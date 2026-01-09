@@ -85,6 +85,27 @@ export default function AdminPanel({ onLogout }) {
               </a>
             )}
 
+            {/* EXTERNAL LINK */}
+            {item.type === "link" && (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  block text-center
+                  bg-blue-100
+                  hover:bg-blue-200
+                  text-blue-900
+                  font-semibold
+                  py-2
+                  rounded-lg
+                  transition
+                "
+              >
+                Open in Strapi
+              </a>
+            )}
+
             {/* GROUP (LABS) */}
             {item.type === "group" && (
               <>
