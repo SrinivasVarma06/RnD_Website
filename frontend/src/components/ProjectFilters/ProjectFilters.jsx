@@ -13,14 +13,20 @@ const ProjectFilters = ({
   itemsPerPage,
   setItemsPerPage,
   showAgencyFilter = true,
+  showDepartmentFilter = true,
 }) => {
+  // Only show department filter if explicitly enabled AND there are departments
+  const shouldShowDeptFilter = showDepartmentFilter && departments.length > 0;
+  
   const clearAllFilters = () => {
     setStatusFilter('all');
-    setDepartmentFilter('all');
+    if (setDepartmentFilter) setDepartmentFilter('all');
     if (setAgencyFilter) setAgencyFilter('all');
   };
 
-  const hasActiveFilters = statusFilter !== 'all' || departmentFilter !== 'all' || (agencyFilter && agencyFilter !== 'all');
+  const hasActiveFilters = statusFilter !== 'all' || 
+    (shouldShowDeptFilter && departmentFilter !== 'all') || 
+    (agencyFilter && agencyFilter !== 'all');
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
@@ -58,23 +64,25 @@ const ProjectFilters = ({
           </div>
         </div>
 
-        {/* Department Filter */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
-          <div className="relative">
-            <select
-              value={departmentFilter}
-              onChange={(e) => setDepartmentFilter(e.target.value)}
-              className="w-full appearance-none bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-            >
-              <option value="all">All Departments</option>
-              {departments.map((dept, idx) => (
-                <option key={idx} value={dept}>{dept}</option>
-              ))}
-            </select>
-            <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        {/* Department Filter - only show if there are departments */}
+        {shouldShowDeptFilter && (
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
+            <div className="relative">
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="w-full appearance-none bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              >
+                <option value="all">All Departments</option>
+                {departments.map((dept, idx) => (
+                  <option key={idx} value={dept}>{dept}</option>
+                ))}
+              </select>
+              <ChevronDown size={16} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Agency Filter (optional) */}
         {showAgencyFilter && agencies.length > 0 && (
@@ -126,7 +134,7 @@ const ProjectFilters = ({
               </button>
             </span>
           )}
-          {departmentFilter !== 'all' && (
+          {shouldShowDeptFilter && departmentFilter !== 'all' && (
             <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
               Dept: {departmentFilter}
               <button onClick={() => setDepartmentFilter('all')} className="hover:text-green-900">

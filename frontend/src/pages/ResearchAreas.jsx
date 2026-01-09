@@ -1,226 +1,250 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
-import {
-  Typography,
-  TextField,
-  Box,
-  MenuItem,
-} from '@mui/material';
+import { Search, BookOpen, Users, Building2 } from 'lucide-react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
+import { Pagination } from '../components/ProjectFilters';
 
 const normalize = (str) => str?.toLowerCase().replace(/\s+/g, '') || '';
 
 const ResearchAreas = () => {
   const [data, setData] = useState([]);
-  const [nameSearch, setNameSearch] = useState('');
-  const [selectedDept, setSelectedDept] = useState('');
-  const [topicSearch, setTopicSearch] = useState('');
+  const [search, setSearch] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 100;
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        let allData = [];
-        let page = 1;
-        let hasMore = true;
-
-        while (hasMore) {
-          const response = await axios.get(
-            `https://rnd.iitdh.ac.in/strapi/api/research-areas?populate=*&pagination[page]=${page}&pagination[pageSize]=${itemsPerPage}`
-          );
-          const results = response.data?.data || [];
-          const meta = response.data?.meta?.pagination || {};
-          allData = [...allData, ...results];
-          hasMore = page < meta.pageCount;
-          page += 1;
-        }
+        const response = await axios.get(
+          `https://opensheet.elk.sh/1L4vUCsuD0Qn6UjloNVOMMmaMl37YaWIl2MFOZIMG5ps/Sheet1`
+        );
+        const rawData = response.data || [];
+        const allData = rawData
+          .filter(row => row['ProfName'] || row['Name'])
+          .map((row, idx) => ({
+            id: idx,
+            ProfName: row['ProfName'] || row['Name'] || '',
+            Department: row['Department'] || '',
+            AreaofInterest: (row['AreaofInterest__Area'] || row['Areas of Interest'] || row['AreaofInterest'] || '')
+              .split(',')
+              .map((area, areaIdx) => ({ id: areaIdx, Area: area.trim() }))
+              .filter(a => a.Area)
+          }));
         setData(allData);
-        setTotalPages(Math.ceil(allData.length / itemsPerPage));
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+        setError(err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, []);   
+  }, []);
 
-  const isSearching = 
-    normalize(nameSearch).length >= 3 ||
-    normalize(topicSearch).length >= 3 ||
-    selectedDept !== '';
+  // Extract unique departments
+  const departments = useMemo(() => {
+    return [...new Set(data.map((item) => item.Department).filter(Boolean))].sort();
+  }, [data]);
 
-  const uniqueDepartments = [
-    ...new Set(data.map((item) => item.Department).filter(Boolean)),
-  ];
+  // Filter and process data
+  const processedData = useMemo(() => {
+    let filtered = [...data];
 
-  const filteredData = isSearching ? data.filter((item) => {
-    const nameMatch = normalize(item.ProfName).includes(normalize(nameSearch));
-    const deptMatch = selectedDept ? item.Department === selectedDept : true;
-    const topicMatch = topicSearch
-      ? item.AreaofInterest?.some((area) =>
-        normalize(area.Area).includes(normalize(topicSearch))
-      )
-      : true;
+    // Search filter (name or research topic)
+    if (search.length >= 2) {
+      const searchLower = normalize(search);
+      filtered = filtered.filter(item => {
+        const nameMatch = normalize(item.ProfName).includes(searchLower);
+        const topicMatch = item.AreaofInterest?.some(area => 
+          normalize(area.Area).includes(searchLower)
+        );
+        return nameMatch || topicMatch;
+      });
+    }
 
-    return nameMatch && deptMatch && topicMatch;
-  }) : data;
+    // Department filter
+    if (departmentFilter !== 'all') {
+      filtered = filtered.filter(item => item.Department === departmentFilter);
+    }
 
-  const paginatedData = isSearching ? filteredData : filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  ); 
+    return filtered;
+  }, [data, search, departmentFilter]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // Statistics
+  const stats = useMemo(() => {
+    const uniqueProfs = data.filter(d => d.ProfName).length;
+    const uniqueDepts = new Set(data.map(d => d.Department).filter(Boolean)).size;
+    const totalAreas = data.reduce((sum, d) => sum + (d.AreaofInterest?.length || 0), 0);
+    return { uniqueProfs, uniqueDepts, totalAreas };
+  }, [data]);
+
+  // Pagination
+  const totalPages = Math.ceil(processedData.length / itemsPerPage);
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return processedData.slice(start, start + itemsPerPage);
+  }, [processedData, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, departmentFilter, itemsPerPage]);
+
+  if (loading) return <PageSkeleton />;
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4 text-red-600 text-center">
+        <p className="text-xl font-semibold">Error: {error.message}</p>
+        <p className="text-sm mt-2">Please check your internet connection or try again later.</p>
+      </div>
+    );
+  }
 
   return (
-    <div id='research-top' className="p-4 max-w-screen-xl mx-auto">
-      <Box sx={{ maxWidth: '95%', mx: 'auto', p: 2 }}>
-        <Typography variant="h5" fontWeight="bold" mb={3} align="center">
-          Academics and Research Areas
-        </Typography>
+    <div className="max-w-[95%] mx-auto p-4" id="research-top">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
+          <BookOpen className="text-purple-700" size={36} />
+          Research Areas
+        </h1>
+        <p className="text-gray-600 mt-3 text-base md:text-lg">Faculty members and their areas of research interest</p>
+      </div>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: 2,
-            mb: 3,
-          }}
-        >
-          <TextField
-            fullWidth
-            label="Search by Name"
-            variant="outlined"
-            size="small"
-            value={nameSearch}
-            onChange={(e) => setNameSearch(e.target.value)}
-          />
-
-          <TextField
-            fullWidth
-            select
-            label="Filter by Department"
-            value={selectedDept}
-            onChange={(e) => setSelectedDept(e.target.value)}
-            variant="outlined"
-            size="small"
-          >
-            <MenuItem value="">All Departments</MenuItem>
-            {uniqueDepartments.map((dept, idx) => (
-              <MenuItem key={idx} value={dept}>
-                {dept}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            fullWidth
-            label="Search by Research Topic"
-            variant="outlined"
-            size="small"
-            value={topicSearch}
-            onChange={(e) => setTopicSearch(e.target.value)}
-          />
-        </Box>
-      </Box>
-
-      <div className="p-4" id="research-areas-table">
-        <div className="overflow-x-auto shadow-lg rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-purple-800">
-              <tr>
-                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
-                  Name
-                </th>
-                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
-                  Department
-                </th>
-                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide">
-                  Areas of Interest
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {loading ? (
-                <tr>
-                  <td colSpan="3" className="text-center p-6">
-                    <PageSkeleton />
-                  </td>
-                </tr>
-              ) : paginatedData.length > 0 ? (
-                paginatedData.map((prof) => (
-                  <tr key={prof.id} className="hover:bg-gray-50">
-                    <td className="px-3 py-2 text-sm text-gray-900">
-                      {prof.ProfName}
-                    </td>
-                    <td className="px-3 py-2 text-sm text-gray-900">
-                      {prof.Department}
-                    </td>
-                    <td className="px-3 py-2 text-sm text-gray-900">
-                      <ul className="list-disc ml-4 space-y-0.5">
-                        {prof.AreaofInterest.map((area) => (
-                          <li key={area.id}>{area.Area}</li>
-                        ))}
-                      </ul>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr className="bg-gray-50">
-                  <td
-                    colSpan="3"
-                    className="px-4 py-6 text-center text-gray-500 text-sm sm:text-base"
-                  >
-                    No matching research areas found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
+          <div className="flex items-center gap-3">
+            <Users className="text-purple-600" size={24} />
+            <div>
+              <p className="text-base md:text-lg text-gray-600 font-medium">Faculty Members</p>
+              <p className="text-3xl font-bold text-gray-800">{stats.uniqueProfs}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
+          <div className="flex items-center gap-3">
+            <Building2 className="text-purple-600" size={24} />
+            <div>
+              <p className="text-base md:text-lg text-gray-600 font-medium">Departments</p>
+              <p className="text-3xl font-bold text-purple-600">{stats.uniqueDepts}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
+          <div className="flex items-center gap-3">
+            <BookOpen className="text-purple-600" size={24} />
+            <div>
+              <p className="text-base md:text-lg text-gray-600 font-medium">Research Areas</p>
+              <p className="text-3xl font-bold text-green-600">{stats.totalAreas}</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      {!loading && totalPages > 1 && !isSearching &&(
-        <div className="flex justify-center items-center mt-4 flex-wrap gap-2 text-sm sm:text-base">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            className="cursor-pointer px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Prev
-          </button>
+      {/* Search Bar */}
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+        <input
+          type="text"
+          placeholder="Search by name or research topic..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+        />
+      </div>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`cursor-pointer px-3 py-1 rounded border ${page === currentPage
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
-                }`}
+      {/* Filters Row */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Department Filter */}
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
+            <select
+              value={departmentFilter}
+              onChange={(e) => setDepartmentFilter(e.target.value)}
+              className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
-              {page}
-            </button>
-          ))}
+              <option value="all">All Departments</option>
+              {departments.map((dept, idx) => (
+                <option key={idx} value={dept}>{dept}</option>
+              ))}
+            </select>
+          </div>
 
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-            className="cursor-pointer px-3 py-1 rounded border bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
-          >
-            Next
-          </button>
+          {/* Items Per Page */}
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Show per page</label>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
+
+          {/* Results Count */}
+          <div className="flex items-end">
+            <p className="text-sm text-gray-600 pb-2">
+              Showing {processedData.length} of {data.length} entries
+            </p>
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto shadow-lg rounded-lg">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-purple-800">
+            <tr>
+              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Name</th>
+              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Department</th>
+              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Areas of Interest</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {paginatedData.length === 0 ? (
+              <tr>
+                <td colSpan="3" className="px-4 py-8 text-center text-gray-500">
+                  No matching research areas found.
+                </td>
+              </tr>
+            ) : (
+              paginatedData.map((prof) => (
+                <tr key={prof.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{prof.ProfName}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700">{prof.Department}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700">
+                    <ul className="list-disc ml-4 space-y-0.5">
+                      {prof.AreaofInterest.map((area) => (
+                        <li key={area.id}>{area.Area}</li>
+                      ))}
+                    </ul>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+        totalItems={processedData.length}
+        itemsPerPage={itemsPerPage}
+      />
     </div>
   );
 };

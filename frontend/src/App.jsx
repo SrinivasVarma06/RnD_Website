@@ -1,5 +1,5 @@
 // App.jsx 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Topbar from './components/Topbar/Topbar';
 import Navbar from './components/Navbar/Navbar';
@@ -7,9 +7,9 @@ import Footer from './components/Footer/Footer';
 import BackToTop from './components/BackToTop/BackToTop';
 import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import PageSkeleton from './components/LoadingSkeleton/PageSkeleton';
-
-import "./pages/labs/nodata.css"
-import LabSubNavbar from './components/labnav'
+import "./pages/labs/nodata.css";
+import LabSubNavbar from './components/labnav';
+import AdminGate from "./admin/adminGate";
 
 // Lazy load ALL pages for better code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -28,7 +28,7 @@ const CSRP = lazy(() => import('./pages/CSRProjects'));
 const Funding = lazy(() => import('./pages/Funding_statistics'));
 const Office = lazy(() => import('./pages/Office_statistics'));
 const Documents = lazy(() => import('./pages/Documents'));
-const Searchresults = lazy(() => import('./pages/searchresults')); 
+const Searchresults = lazy(() => import('./pages/searchresults'));
 const Ipr = lazy(() => import('./pages/iprcommittee'));
 const Ethics = lazy(() => import('./pages/ethicscommitte'));
 const Publications = lazy(() => import('./pages/Publications'));
@@ -61,10 +61,9 @@ function ScrollToTop() {
 }
 
 function App() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const location = useLocation();
   const isLabsPage = location.pathname.startsWith('/Labs');
-
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -94,13 +93,12 @@ function App() {
           {/* Breadcrumb Navigation */}
           <Breadcrumbs />
           
-          <div key={location.pathname} className="max-w-full overflow-x-hidden flex-grow animate-fadeIn">
+          <div key={location.pathname} className="max-w-full overflow-x-hidden flex-grow">
             {/* Scroll restoration on route change */}
             <ScrollToTop />
             {isLabsPage && <LabSubNavbar />}
             <Suspense fallback={<PageSkeleton />}>
               <Routes>
-                {/* Main Pages */}
                 <Route path="/" element={<Home />} />
                 <Route path="/opportunities" element={<Opportunities />} />
                 <Route path="/forms" element={<Forms />} />
@@ -111,13 +109,14 @@ function App() {
                 <Route path="/deans" element={<Deans />} />
                 <Route path="/search" element={<Searchresults />} />
                 <Route path="/feedback" element={<Feedback />} />
-                
+                {/* Documents route aliases for both /documents and /Documents */}
+                <Route path="/documents" element={<Documents />} />
+                <Route path="/Documents" element={<Documents />} />
                 {/* Statistics Pages */}
                 <Route path="/FundingStatistics" element={<Funding />} />
                 <Route path="/statistics/Office" element={<Office />} />
                 <Route path="/statistics/projects" element={<Statsofprojects />} />
                 <Route path="/statistics/publications" element={<Statsofpublications />} />
-                
                 {/* Projects */}
                 <Route path="/Projects/Sponsored" element={<Sponsored />} />
                 <Route path="/Projects/Consultancy" element={<Consultancy />} />
@@ -125,13 +124,10 @@ function App() {
                 <Route path="/Projects/Fellowships" element={<Fellowship />} />
                 <Route path="/Projects/Workshops" element={<Workshops />} />
                 <Route path="/Projects/sgnf" element={<Sgnf />} />
-                
-                {/* Committees */}
                 <Route path="/Committees/ethicscommittee" element={<Ethics />} />
                 <Route path="/Committees/biosafety" element={<Biosafety />} />
                 <Route path="/Committees/ipr" element={<Ipr />} />
-                
-                {/* Labs */}
+                <Route path="/admin" element={<AdminGate />} />
                 <Route path="/Labs/cse" element={<Cse />} />
                 <Route path="/Labs/civil" element={<Civil />} />
                 <Route path="/Labs/eece" element={<Eece />} />

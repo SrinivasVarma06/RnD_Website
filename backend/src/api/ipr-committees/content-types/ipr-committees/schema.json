@@ -1,0 +1,19 @@
+{
+  "collectionName": "ipr_committees",
+  "info": {
+    "singularName": "ipr-committee",
+    "pluralName": "ipr-committees",
+    "displayName": "IPR Committee",
+    "description": "Institute IPR committee members"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "sl_no": { "type": "integer" },
+    "name": { "type": "string" },
+    "current": { "type": "string" },
+    "role": { "type": "string" },
+    "notes": { "type": "text" }
+  }
+}

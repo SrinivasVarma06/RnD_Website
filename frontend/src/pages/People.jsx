@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import Deans from './Deans.jsx';
-const API_URL = "https://rnd.iitdh.ac.in/strapi/api/people?populate=*&sort=createdAt:desc";
+const API_URL = "https://opensheet.elk.sh/1DPFcbQFTMe5AsEHycc25MDc-SlvfJhli8taVGR8mORU/Sheet1";
 
 // Navigation Card Component
 const NavCard = ({ title, icon, targetId }) => {
@@ -236,8 +236,19 @@ const People = () => {
     axios
       .get(API_URL)
       .then((res) => {
-        // Strapi v4 response: res.data.data is array of { id, attributes: { ...fields } }
-        const fetched = res.data.data;
+        // OpenSheet returns flat array directly
+        const rawData = res.data || [];
+        // Transform: convert 'null' strings to actual null
+        const fetched = rawData.map((p, idx) => ({
+          id: idx,
+          name: p.name || '',
+          title: p.title || '',
+          email: p.email || '',
+          imageUrl: (p.imageUrl && p.imageUrl !== 'null') ? p.imageUrl : '',
+          type: p.type || '',
+          website: (p.website && p.website !== 'null') ? p.website : '',
+          expertise: (p.expertise && p.expertise !== 'null') ? p.expertise : ''
+        }));
         setAllPeople(fetched);
         localStorage.setItem("people_cache_v1", JSON.stringify(fetched));
         setLoading(false);

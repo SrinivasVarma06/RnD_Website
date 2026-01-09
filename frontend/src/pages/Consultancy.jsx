@@ -60,13 +60,18 @@ export default function Consultancy() {
     return endDate > new Date();
   }, []);
 
-  // Extract unique departments
+  // Extract unique departments from Dept(s) column
   const departments = useMemo(() => {
     const depts = new Set();
     doc.forEach(item => {
-      const investigator = item["Investigator(s)"] || '';
-      const match = investigator.match(/\(([^)]+)\)/);
-      if (match) depts.add(match[1].trim());
+      const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
+      if (deptCol && deptCol.trim()) {
+        // Handle multiple departments separated by comma or slash
+        deptCol.split(/[,\/]/).forEach(d => {
+          const trimmed = d.trim();
+          if (trimmed) depts.add(trimmed);
+        });
+      }
     });
     return Array.from(depts).sort();
   }, [doc]);
@@ -102,8 +107,8 @@ export default function Consultancy() {
 
     if (departmentFilter !== 'all') {
       filtered = filtered.filter(item => {
-        const investigator = item["Investigator(s)"] || '';
-        return investigator.toLowerCase().includes(departmentFilter.toLowerCase());
+        const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
+        return deptCol.toLowerCase().includes(departmentFilter.toLowerCase());
       });
     }
 

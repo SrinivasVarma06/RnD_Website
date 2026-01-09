@@ -65,13 +65,20 @@ export default function CSR() {
     return Object.keys(info[0]);
   }, [info]);
 
-  // Extract unique departments
+  // Extract unique departments from Dept(s) column
   const departments = useMemo(() => {
     const depts = new Set();
     info.forEach(item => {
-      const investigator = item["Investigator(s)"] || item["PI"] || '';
-      const match = investigator.match(/\(([^)]+)\)/);
-      if (match) depts.add(match[1].trim());
+      // Check for Dept(s) column first, then try extracting from investigator
+      const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
+      if (deptCol && deptCol.trim()) {
+        depts.add(deptCol.trim());
+      } else {
+        // Fallback: try extracting from Investigator name
+        const investigator = item["Investigator(s)"] || item["PI"] || '';
+        const match = investigator.match(/\(([^)]+)\)/);
+        if (match) depts.add(match[1].trim());
+      }
     });
     return Array.from(depts).sort();
   }, [info]);
@@ -106,8 +113,8 @@ export default function CSR() {
 
     if (departmentFilter !== 'all') {
       filtered = filtered.filter(item => {
-        const investigator = item["Investigator(s)"] || item["PI"] || '';
-        return investigator.toLowerCase().includes(departmentFilter.toLowerCase());
+        const dept = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
+        return dept.toLowerCase().includes(departmentFilter.toLowerCase());
       });
     }
 

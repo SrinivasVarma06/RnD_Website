@@ -15,7 +15,7 @@ const Home = () => {
 
                 const imageUrls = data
                     .filter((file) => file.mime.includes("image/"))
-                    .map((file) => file.url.startsWith("http") ? file.url : `http://localhost:1337${file.url}`);
+                    .map((file) => file.url.startsWith("http") ? file.url : `https://rnd.iitdh.ac.in/strapi${file.url}`);
 
                 setDriveImages(imageUrls);
             } catch (err) {

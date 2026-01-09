@@ -1,0 +1,23 @@
+{
+  "collectionName": "biosafety_committees",
+  "info": {
+    "singularName": "biosafety-committee",
+    "pluralName": "biosafety-committees",
+    "displayName": "Biosafety Committee",
+    "description": "Members and designations for the biosafety committee"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "designation": {
+      "type": "string"
+    },
+    "person": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}
