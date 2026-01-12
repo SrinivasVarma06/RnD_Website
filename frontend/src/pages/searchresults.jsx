@@ -1,15 +1,21 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import searchData from '../searchData.jsx';
 import './searchresults.css';
 import PageHeader from '../components/PageHeader/PageHeader';
+
+// Helper to check if link is external
+const isExternalLink = (link) => link && (link.startsWith('http://') || link.startsWith('https://'));
 
 export default function Searchresults() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q")?.toLowerCase() || "";
 
   const filteredResults = searchData.filter(item =>
-    item.content.toLowerCase().includes(query)
+    item.content.toLowerCase().includes(query) || 
+    item.title.toLowerCase().includes(query) ||
+    item.displaycontent.toLowerCase().includes(query) ||
+    item.page.toLowerCase().includes(query)
   );
 
   const groupedResults = filteredResults.reduce((acc, item) => {
@@ -38,9 +44,20 @@ export default function Searchresults() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {items.map((item, index) => (
                 <div key={index} className="border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md hover:border-purple-200 transition-all duration-200 bg-white">
-                  <a href={item.link} className="!text-purple-600 font-medium hover:underline">
-                    {item.title}
-                  </a>
+                  {isExternalLink(item.link) ? (
+                    <a 
+                      href={item.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="!text-purple-600 font-medium hover:underline"
+                    >
+                      {item.title}
+                    </a>
+                  ) : (
+                    <Link to={item.link} className="!text-purple-600 font-medium hover:underline">
+                      {item.title}
+                    </Link>
+                  )}
                   <p className="text-sm text-gray-600 mt-1">{item.displaycontent}</p>
                 </div>
               ))}

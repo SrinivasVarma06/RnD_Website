@@ -27,24 +27,31 @@ const searchData = [
   // People Page
   {
     page: 'People',
-    title: 'Faculty',
-    content: 'Meet the Dean, Associate Dean, faculty Incharge and staff of the Research and Development Section with their research areas and expertise.',
+    title: 'Faculty & People',
+    content: 'Meet the people of R&D Section - Dean, Associate Dean, faculty Incharge and staff with their research areas and expertise.',
     displaycontent: 'Faculty and staff profiles',
     link: '/people'
   },
   {
     page: 'People',
     title: 'Staff',
-    content: 'Department staff and administrative team.',
+    content: 'Department staff, administrative team and people working in R&D section.',
     displaycontent: 'Administrative staff',
     link: '/people'
   },
   {
     page: 'People',
     title: 'Dean',
-    content: 'Research and development section dean and associate dean.',
+    content: 'Research and development section dean and associate dean, key people in leadership.',
     displaycontent: 'Dean and Associate Dean',
     link: '/people'
+  },
+  {
+    page: 'Deans',
+    title: 'Former Deans',
+    content: 'Former Deans and Associate Deans of Research and Development Section, past leadership.',
+    displaycontent: 'Former R&D leadership',
+    link: '/deans'
   },
 
   // Projects
