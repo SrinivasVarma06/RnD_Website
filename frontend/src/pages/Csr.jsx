@@ -3,7 +3,8 @@ import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 
 const CACHE_EXPIRY = 5 * 60 * 1000;
-const backendUrl = import.meta.env.VITE_STRAPI_URL;
+// CSR data now fetched from Google Sheets
+const CSR_SHEET_URL = 'https://opensheet.elk.sh/1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM/Sheet1';
 
 export default function Csr() {
   const [showModal, setShowModal] = useState(false);
@@ -27,8 +28,8 @@ export default function Csr() {
         setLoading(false);
       } else {
         try {
-          const response = await axios.get(`https://rnd.iitdh.ac.in/strapi/api/csr?populate=*`);
-          const items = response.data?.data?.link || [];
+          const response = await axios.get(CSR_SHEET_URL);
+          const items = response.data || [];
           setCsrData(items);
           localStorage.setItem(cacheKey, JSON.stringify(items));
           localStorage.setItem(cacheTimestampKey, Date.now().toString());
@@ -42,7 +43,7 @@ export default function Csr() {
     };
 
     loadData();
-  }, [backendUrl]);
+  }, []);
 
   const handleViewClick = (link) => {
   if (link) {

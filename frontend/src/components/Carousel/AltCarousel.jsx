@@ -27,10 +27,18 @@ const CustomCarousel = ({ images }) => {
   useEffect(() => {
     if (images.length === 0) return;
     
-    // Preload first image
+    // Preload first image with timeout fallback
     const img = new Image();
     img.onload = () => setImagesLoaded(true);
+    img.onerror = () => setImagesLoaded(true); // Show anyway on error
     img.src = images[0];
+    
+    // Timeout fallback - show carousel after 3 seconds even if image hasn't loaded
+    const timeout = setTimeout(() => {
+      setImagesLoaded(true);
+    }, 3000);
+    
+    return () => clearTimeout(timeout);
   }, [images]);
 
   useEffect(() => {
@@ -60,6 +68,7 @@ const CustomCarousel = ({ images }) => {
               src={src}
               alt={`Slide ${index + 1}`}
               className="block w-full max-h-none md:max-h-[350px] mx-auto rounded-lg"
+              referrerPolicy="no-referrer"
             />
           </div>
         ))}

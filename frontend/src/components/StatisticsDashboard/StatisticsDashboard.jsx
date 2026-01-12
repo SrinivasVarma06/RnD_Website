@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Briefcase, TrendingUp, Target, BookOpen, Users, Award, FileText, IndianRupee } from 'lucide-react';
 
-const STRAPI_BASE = 'https://rnd.iitdh.ac.in/strapi/api';
-
 const SHEETS = {
   consultancy: 'https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1',
   sponsored: 'https://opensheet.elk.sh/1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o/Sheet1',
@@ -88,8 +86,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
     csrProjects: { count: 0, value: 0 },
     publications: 0,
     patents: 0,
-    faculty: 0,
-    researchAreas: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -104,12 +100,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         fetch(SHEETS.csrProjects).then(r => r.json()).catch(() => []),
         fetch(SHEETS.publications).then(r => r.json()).catch(() => []),
         fetch(SHEETS.patents).then(r => r.json()).catch(() => []),
-      ]);
-
-      // Fetch from Strapi (parallel)
-      const [peopleRes, researchAreasRes] = await Promise.all([
-        fetch(`${STRAPI_BASE}/people?pagination[pageSize]=1`).then(r => r.json()).catch(() => ({ meta: { pagination: { total: 0 } } })),
-        fetch(`${STRAPI_BASE}/research-areas?pagination[pageSize]=1`).then(r => r.json()).catch(() => ({ meta: { pagination: { total: 0 } } })),
       ]);
 
       // Calculate consultancy stats
@@ -139,8 +129,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         csrProjects: { count: csrRes.length, value: csrValue },
         publications: publicationsRes.length,
         patents: patentsRes.length,
-        faculty: peopleRes?.meta?.pagination?.total || 0,
-        researchAreas: researchAreasRes?.meta?.pagination?.total || 0,
       });
     } catch (error) {
       console.error('Error fetching statistics:', error);
@@ -203,7 +191,7 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
         <StatCard
           icon={Award}
           label="Patents"
@@ -212,17 +200,10 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
           isLoading={loading}
         />
         <StatCard
-          icon={Users}
-          label="R&D Team Members"
-          value={stats.faculty}
-          color="border-teal-500"
-          isLoading={loading}
-        />
-        <StatCard
-          icon={FileText}
-          label="Research Areas"
-          value={stats.researchAreas}
-          color="border-purple-500"
+          icon={BookOpen}
+          label="Publications"
+          value={stats.publications}
+          color="border-orange-500"
           isLoading={loading}
         />
       </div>

@@ -5,7 +5,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import Deans from './Deans.jsx';
-const API_URL = "https://opensheet.elk.sh/1DPFcbQFTMe5AsEHycc25MDc-SlvfJhli8taVGR8mORU/Sheet1";
+
+// Using opensheet.vercel.app as alternative API
+// Make sure the Google Sheet is publicly shared (Anyone with the link can view)
+// Tab name is "json" (visible at bottom of spreadsheet)
+const API_URL = "https://opensheet.vercel.app/1DPFcbQFTMe5AsEHycc25MDc-SlvfJhli8taVGR8mORU/json";
 
 // Navigation Card Component
 const NavCard = ({ title, icon, targetId }) => {

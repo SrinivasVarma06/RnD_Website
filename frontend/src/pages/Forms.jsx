@@ -3,7 +3,6 @@ import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 
 const CACHE_EXPIRY = 5 * 60 * 1000;
-const backendUrl = import.meta.env.VITE_STRAPI_URL;
 
 export default function Forms() {
 
@@ -39,7 +38,7 @@ export default function Forms() {
     };
 
     loadData();
-  }, [backendUrl]);
+  }, []);
 
 
   return (

@@ -134,8 +134,13 @@ export const ADMIN_LINKS = [
     url: "https://docs.google.com/spreadsheets/d/1gcvBIaxeUtNLoqsTKuCZsxFWONsIF58kI8RtKyqJ7jk/edit?gid=0#gid=0",
   },
   {
-    label: "Carousel Images / Media",
+    label: "Carousel Images",
+    type: "sheet",
+    url: "https://docs.google.com/spreadsheets/d/1vWcPPCIsbXw0O8zwvjXAkXn0Hg7zY0pUWwUCJ_jTkjc/edit",
+  },
+  {
+    label: "Media Folder (Google Drive)",
     type: "link",
-    url: "https://rnd.iitdh.ac.in/strapi/admin/plugins/upload",
+    url: "https://drive.google.com/drive/folders/1SfXu6_UghDuN4OMZ9apNsOgAvjdJ6z_W",
   },
 ];

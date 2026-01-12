@@ -5,8 +5,6 @@ import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 
 const CACHE_EXPIRY = 5 * 60 * 1000;
 
-const backendUrl = import.meta.env.VITE_STRAPI_URL;
-
 export default function Documents() {
   const [docsData, setDocsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +40,7 @@ export default function Documents() {
     };
 
     loadData();
-  }, [backendUrl]);
+  }, []);
 
   return (
     <div id='doc-top' className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 text-gray-800">
@@ -74,7 +72,7 @@ export default function Documents() {
           <div className="bg-white p-5 rounded-2xl shadow-md border border-gray-200">
             <ol className="list-decimal ml-6 space-y-2">
               {docsData.map((row, idx) => (         
-                <li key={row["Serial number"]}>
+                <li key={row["Serial number"] || idx}>
                   <a
                     href={row["Link"]}
                     className="text-purple-600 hover:text-purple-800 no-underline"

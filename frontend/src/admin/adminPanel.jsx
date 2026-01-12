@@ -43,27 +43,6 @@ export default function AdminPanel({ onLogout }) {
               {item.label}
             </h3>
 
-            {/* STRAPI */}
-            {item.type === "strapi" && (
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  block text-center
-                  bg-purple-100
-                  hover:bg-purple-200
-                  text-purple-900
-                  font-semibold
-                  py-2
-                  rounded-lg
-                  transition
-                "
-              >
-                Open in Strapi
-              </a>
-            )}
-
             {/* GOOGLE SHEET */}
             {item.type === "sheet" && (
               <a
@@ -102,7 +81,7 @@ export default function AdminPanel({ onLogout }) {
                   transition
                 "
               >
-                Open in Strapi
+                Open in Google Drive
               </a>
             )}
 

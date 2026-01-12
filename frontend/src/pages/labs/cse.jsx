@@ -79,7 +79,7 @@ const SHEET_API_URL = "https://opensheet.elk.sh/14ipy-bZL0U3v2BzXWm5ivb9uOlM5p8D
         return (
             <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 text-gray-800 flex flex-col justify-center items-center text-red-600">
                 <p className="text-xl font-semibold">Error: {error.message}</p>
-                <p className="text-sm mt-2 text-center">Please ensure your Strapi server is running, your API token is correct, and network is available.</p>
+                <p className="text-sm mt-2 text-center">Please check your network connection and try again.</p>
             </div>
         );
     }
