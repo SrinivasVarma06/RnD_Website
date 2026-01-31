@@ -49,12 +49,12 @@ export default function Searchresults() {
                       href={item.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="!text-purple-600 font-medium hover:underline"
+                      className="!text-purple-600 font-medium underline hover:text-purple-800"
                     >
                       {item.title}
                     </a>
                   ) : (
-                    <Link to={item.link} className="!text-purple-600 font-medium hover:underline">
+                    <Link to={item.link} className="!text-purple-600 font-medium underline hover:text-purple-800">
                       {item.title}
                     </Link>
                   )}

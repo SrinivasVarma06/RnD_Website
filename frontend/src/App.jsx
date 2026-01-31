@@ -71,7 +71,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden flex flex-col">
-      <Topbar toggleMobileMenu={toggleMobileMenu} isMobileMenuOpen={isMobileMenuOpen} />
+      <Topbar 
+        toggleMobileMenu={toggleMobileMenu} 
+        isMobileMenuOpen={isMobileMenuOpen}
+        setMobileMenuOpen={setIsMobileMenuOpen}
+      />
 
       <div 
         className={`sm:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${

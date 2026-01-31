@@ -78,7 +78,7 @@ export default function Forms() {
                     <th
                       key={i}
                       scope="col"
-                      className="px-3 py-3.5 text-left text-sm md:text-base font-semibold text-white tracking-wide"
+                      className="px-3 py-3.5 text-left text-base font-semibold text-white tracking-wide"
                     >
                       {col}
                     </th>
@@ -97,18 +97,14 @@ export default function Forms() {
                     return (
                       <td
                         key={colIndex}
-                        className="px-3 py-4 whitespace-normal text-sm text-gray-900 text-left"
+                        className="px-3 py-4 whitespace-normal text-base text-gray-900 text-left"
                       >
                         {isLink ? (
                           <a
                             href={cell}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`underline ${
-                              col.toLowerCase().includes("pdf")
-                                ? "text-purple-700 hover:text-purple-900"
-                                : "text-purple-700 hover:text-purple-900"
-                            }`}
+                            style={{ color: '#2563eb', textDecoration: 'underline' }}
                           >
                             {col.toLowerCase().includes("pdf") ? "View" : "Download"}
                           </a>

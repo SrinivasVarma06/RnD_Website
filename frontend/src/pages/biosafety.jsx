@@ -193,9 +193,9 @@ export default function Biosafety() {
             ) : (
               paginatedData.map((m, idx) => (
                 <tr key={idx} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{m.designation}</td>
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900 text-center">:</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{m.person}</td>
+                  <td className="px-4 py-3 text-sm font-medium text-gray-800">{m.designation}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800 text-center">:</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{m.person}</td>
                 </tr>
               ))
             )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
-import { Search, Award, IndianRupee, Calendar, Clock, CheckCircle2, User } from 'lucide-react';
+import { Search, Award, CheckCircle2 } from 'lucide-react';
 
 export default function Fellowship() {
     const [info, setInfo] = useState([]);
@@ -267,11 +267,11 @@ export default function Fellowship() {
                         <thead className="bg-purple-800">
                             <tr>
                                 {displayColumns.map((key, index) => (
-                                    <th key={index} className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white whitespace-nowrap">
+                                    <th key={index} className="px-4 py-3.5 text-left text-base font-semibold text-white whitespace-nowrap">
                                         {getDisplayKey(key)}
                                     </th>
                                 ))}
-                                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Status</th>
+                                <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Status</th>
                             </tr>
                         </thead>
                     )}
@@ -283,11 +283,11 @@ export default function Fellowship() {
                             return (
                                 <tr key={idx} className="hover:bg-gray-50">
                                     {displayColumns.map((key, i) => (
-                                        <td key={i} className="px-4 py-3 text-sm text-gray-700 whitespace-normal" style={{ maxWidth: '300px' }}>
+                                        <td key={i} className="px-4 py-3 text-base text-gray-800 whitespace-normal" style={{ maxWidth: '300px' }}>
                                             {item[key] === '' ? '-' : item[key]}
                                         </td>
                                     ))}
-                                    <td className="px-4 py-3 text-sm">
+                                    <td className="px-4 py-3 text-base">
                                         <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${ongoing ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'}`}>
                                             <CheckCircle2 size={12} />{ongoing ? 'Ongoing' : 'Completed'}
                                         </span>

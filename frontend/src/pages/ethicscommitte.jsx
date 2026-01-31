@@ -191,18 +191,10 @@ export default function Ethicscommitte() {
             ) : (
               paginatedData.map((item, index) => (
                 <tr key={item.id || index} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{item.sl_no}</td>
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{item.Name}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{item.currentorganization}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
-                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                      item.role === 'Chairperson' ? 'bg-purple-100 text-purple-700' :
-                      item.role === 'Member Secretary' ? 'bg-green-100 text-green-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
-                      {item.role}
-                    </span>
-                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item.sl_no}</td>
+                  <td className="px-4 py-3 text-sm font-medium text-gray-800">{item.Name}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item.currentorganization}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item.role}</td>
                 </tr>
               ))
             )}

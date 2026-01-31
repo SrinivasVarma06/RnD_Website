@@ -12,7 +12,7 @@ const Feedback = () => {
         <p className="text-base md:text-lg text-center text-gray-600 mb-10 md:mb-14 max-w-4xl mx-auto">
           Your insights help us improve! Please choose a category below to provide your feedback.
           <br />
-          For any direct queries, you can reach out at: <a href="mailto:adean.rnd@iitdh.ac.in" className="text-purple-600 hover:underline">adean.rnd@iitdh.ac.in</a>
+          For any direct queries, you can reach out at: <a href="mailto:adean.rnd@iitdh.ac.in" className="text-purple-600 underline hover:text-purple-800">adean.rnd@iitdh.ac.in</a>
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

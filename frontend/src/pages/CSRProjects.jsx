@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import axios from 'axios';
-import { Search, Target, IndianRupee, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { Search, Target, CheckCircle2 } from 'lucide-react';
 import './searchresults.css';
 
 export default function CSR() {
@@ -255,12 +255,12 @@ export default function CSR() {
                 {columns.map((key) => (
                   <th
                     key={key}
-                    className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white"
+                    className="px-4 py-3.5 text-left text-base font-semibold text-white"
                   >
                     {key}
                   </th>
                 ))}
-                <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Status</th>
+                <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Status</th>
               </tr>
             </thead>
           )}
@@ -279,12 +279,12 @@ export default function CSR() {
                     {columns.map((key, i) => (
                       <td
                         key={i}
-                        className="px-4 py-3 whitespace-normal text-sm text-gray-700"
+                        className="px-4 py-3 whitespace-normal text-base text-gray-800"
                       >
                         {item[key]}
                       </td>
                     ))}
-                    <td className="px-4 py-3 text-sm">
+                    <td className="px-4 py-3 text-base">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                         ongoing ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'
                       }`}>

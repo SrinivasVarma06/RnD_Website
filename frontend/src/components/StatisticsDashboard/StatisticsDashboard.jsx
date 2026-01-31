@@ -51,12 +51,21 @@ const useCountUp = (end, duration = 2000, start = 0) => {
   return count;
 };
 
-// Stat Card Component
+// Stat Card Component with enhanced hover effects
 const StatCard = ({ icon: Icon, label, value, subValue, color, isLoading }) => {
   const animatedValue = useCountUp(value, 1500);
+  
+  // Get gradient colors based on border color
+  const getGradient = () => {
+    if (color.includes('purple')) return 'from-purple-50 to-white';
+    if (color.includes('green')) return 'from-green-50 to-white';
+    if (color.includes('orange')) return 'from-orange-50 to-white';
+    if (color.includes('red')) return 'from-red-50 to-white';
+    return 'from-gray-50 to-white';
+  };
 
   return (
-    <div className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border-l-4 ${color}`}>
+    <div className={`bg-gradient-to-br ${getGradient()} rounded-xl shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 p-6 border-l-4 ${color} cursor-pointer`}>
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p className="text-gray-600 text-base md:text-lg font-medium mb-2">{label}</p>
@@ -71,7 +80,7 @@ const StatCard = ({ icon: Icon, label, value, subValue, color, isLoading }) => {
             <p className="text-lg md:text-xl text-gray-500 mt-2">{subValue}</p>
           )}
         </div>
-        <div className={`p-4 rounded-full bg-opacity-10 ${color.replace('border-', 'bg-')}`}>
+        <div className={`p-4 rounded-full bg-opacity-20 ${color.replace('border-', 'bg-')} transition-transform duration-300 group-hover:scale-110`}>
           <Icon size={40} className={color.replace('border-', 'text-').replace('-500', '-600')} />
         </div>
       </div>

@@ -1,12 +1,14 @@
 // src/components/Topbar.jsx
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/institute-logo.png'
+import FontSizeControl from '../FontSizeControl/FontSizeControl'
 
-function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
+function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const mobileSearchRef = useRef(null)
+  const desktopSearchRef = useRef(null)
   const navigate = useNavigate()
 
   const handleSearchChange = (e) => {
@@ -30,6 +32,36 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
       setMobileSearchOpen(!mobileSearchOpen)
     }
   }
+
+  // Keyboard shortcuts: "/" to focus search, "Escape" to close
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const activeElement = document.activeElement
+      const isTyping = activeElement?.tagName === 'INPUT' || 
+                       activeElement?.tagName === 'TEXTAREA' ||
+                       activeElement?.isContentEditable
+
+      // "/" key - focus search (only if not already typing)
+      if (event.key === '/' && !isTyping) {
+        event.preventDefault()
+        if (window.innerWidth >= 640) {
+          desktopSearchRef.current?.focus()
+        } else {
+          setMobileSearchOpen(true)
+        }
+      }
+
+      // Escape key - close menus, blur inputs
+      if (event.key === 'Escape') {
+        setMobileSearchOpen(false)
+        if (setMobileMenuOpen) setMobileMenuOpen(false)
+        if (isTyping) activeElement.blur()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [setMobileMenuOpen])
 
   // Close mobile search when clicking outside
   useEffect(() => {
@@ -61,20 +93,24 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
             </svg>
           )}
         </button>
-        {/* Default Logo (hidden on small screens) */}
-        <img
-          src={logo}
-          alt="IIT DH"
-          onClick={()=> window.open('https://www.iitdh.ac.in/', '_blank')}
-          className="hidden sm:block cursor-pointer h-[40px] sm:h-[45px] md:h-[55px] w-auto transition-transform duration-200 hover:scale-[1.02]"
-        />
-        {/* Mobile Logo (visible only on small screens) */}
-        <img
-          src="/institute_favicon.png"
-          alt="IIT DH"
-          onClick={()=> window.open('https://www.iitdh.ac.in/', '_blank')}
-          className="block sm:hidden cursor-pointer h-[50px] w-auto transition-transform duration-200 hover:scale-[1.02]"
-        />
+        {/* Default Logo (hidden on small screens) - with white background for visibility */}
+        <div className="hidden sm:flex items-center bg-white rounded-lg p-1">
+          <img
+            src={logo}
+            alt="IIT Dharwad"
+            onClick={()=> window.open('https://www.iitdh.ac.in/', '_blank')}
+            className="cursor-pointer h-[38px] sm:h-[42px] md:h-[50px] w-auto transition-transform duration-200 hover:scale-[1.02]"
+          />
+        </div>
+        {/* Mobile Logo (visible only on small screens) - with white background */}
+        <div className="flex sm:hidden items-center bg-white rounded-lg p-1">
+          <img
+            src="/institute_favicon.png"
+            alt="IIT Dharwad"
+            onClick={()=> window.open('https://www.iitdh.ac.in/', '_blank')}
+            className="cursor-pointer h-[40px] w-auto transition-transform duration-200 hover:scale-[1.02]"
+          />
+        </div>
       </div>
 
       {/* Department name - centered on laptop+ screens */}
@@ -97,21 +133,26 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen }) {
         </h1>
       </div>
 
-      {/* Desktop Search bar */}
-      <div className="hidden sm:block">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onKeyDown={handleSearchKeyDown}
-          aria-label="Search"
-          className="py-[0.4rem] px-[0.8rem] border border-white rounded-full text-[0.85rem] bg-white w-[150px] md:w-[180px] transition-all duration-200 focus:outline-none focus:border-white focus:shadow focus:shadow-white/40 focus:w-[200px] placeholder-black text-black"
-        />
+      {/* Desktop Search bar and Font Size Control */}
+      <div className="hidden sm:flex items-center gap-3">
+        <FontSizeControl />
+        <div className="relative">
+          <input
+            ref={desktopSearchRef}
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            aria-label="Search (Press / to focus)"
+            className="py-[0.4rem] px-[0.8rem] border border-white rounded-full text-[0.85rem] bg-white w-[150px] md:w-[180px] transition-all duration-200 focus:outline-none focus:border-white focus:shadow focus:shadow-white/40 focus:w-[200px] placeholder-black text-black"
+          />
+        </div>
       </div>
 
-      {/* Mobile Search Icon & Expandable Input */}
-      <div className="sm:hidden flex items-center" ref={mobileSearchRef}>
+      {/* Mobile Font Size Control & Search */}
+      <div className="sm:hidden flex items-center gap-2" ref={mobileSearchRef}>
+        <FontSizeControl />
         <div className={`flex items-center transition-all duration-300 ${mobileSearchOpen ? 'mr-2' : ''}`}>
           {mobileSearchOpen && (
             <input

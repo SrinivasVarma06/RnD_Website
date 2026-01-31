@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, AreaChart, Area
+  ComposedChart, Line
 } from 'recharts';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-import { BookOpen, TrendingUp, Users, Calendar, Award, FileText } from 'lucide-react';
+import { BookOpen, TrendingUp, Calendar, Award, FileText } from 'lucide-react';
 
-const PURPLE_COLORS = ['#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#6d28d9', '#5b21b6', '#4c1d95'];
+
 
 export default function Statsofpublications() {
   const [loading, setLoading] = useState(true);
   const [publicationsData, setPublicationsData] = useState([]);
   const [patentsData, setPatentsData] = useState([]);
+  const [yearlyPage, setYearlyPage] = useState(1);
+  const YEARLY_PER_PAGE = 10;
 
   const URLS = {
     publications: "https://opensheet.vercel.app/10P7vgxarVBixJkawH_SrFf3FaITKWeNLkc2rwPj0aoo/Sheet1",
@@ -71,23 +73,7 @@ export default function Statsofpublications() {
     });
   }, [publicationsByYear]);
 
-  // Top Journals
-  const topJournals = useMemo(() => {
-    const journalData = {};
-    
-    publicationsData.forEach(item => {
-      const journal = item["Source title"] || item["Journal"] || item["journal"] || item["Conference"] || '';
-      const shortJournal = journal.substring(0, 50).trim();
-      if (shortJournal && shortJournal.length > 2) {
-        if (!journalData[shortJournal]) journalData[shortJournal] = { journal: shortJournal, count: 0 };
-        journalData[shortJournal].count += 1;
-      }
-    });
 
-    return Object.values(journalData)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10);
-  }, [publicationsData]);
 
   // Patents by Year
   const patentsByYear = useMemo(() => {
@@ -113,28 +99,7 @@ export default function Statsofpublications() {
     return Object.values(yearData).sort((a, b) => a.year - b.year);
   }, [patentsData]);
 
-  // Author frequency
-  const topAuthors = useMemo(() => {
-    const authorData = {};
-    
-    publicationsData.forEach(item => {
-      const authors = item["Authors"] || item["authors"] || item["Author"] || '';
-      // Split by common separators
-      const authorList = authors.split(/[,;]/).map(a => a.trim()).filter(a => a.length > 2);
-      authorList.forEach(author => {
-        // Clean author name
-        const cleanAuthor = author.replace(/\d+/g, '').trim().substring(0, 30);
-        if (cleanAuthor.length > 2) {
-          if (!authorData[cleanAuthor]) authorData[cleanAuthor] = { author: cleanAuthor, count: 0 };
-          authorData[cleanAuthor].count += 1;
-        }
-      });
-    });
 
-    return Object.values(authorData)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 12);
-  }, [publicationsData]);
 
   // Summary stats
   const summaryStats = useMemo(() => {
@@ -192,29 +157,35 @@ export default function Statsofpublications() {
         </div>
       </div>
 
-      {/* Chart 1: Publications by Year with Trend */}
+      {/* Chart 1: Publications by Year with Trend (Dual Y-Axes) */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           <TrendingUp className="text-purple-600" size={24} />
           Publications by Year
         </h2>
         <ResponsiveContainer width="100%" height={400}>
-          <AreaChart data={cumulativePublications} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <defs>
-              <linearGradient id="colorPubs" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#7c3aed" stopOpacity={0.1}/>
-              </linearGradient>
-            </defs>
+          <ComposedChart data={cumulativePublications} margin={{ top: 20, right: 60, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="year" tick={{ fill: '#6b7280' }} />
-            <YAxis tick={{ fill: '#6b7280' }} />
+            <YAxis 
+              yAxisId="left" 
+              orientation="left" 
+              tick={{ fill: '#7c3aed' }} 
+              label={{ value: 'Publications', angle: -90, position: 'insideLeft', fill: '#7c3aed' }}
+            />
+            <YAxis 
+              yAxisId="right" 
+              orientation="right" 
+              tick={{ fill: '#06b6d4' }} 
+              label={{ value: 'Cumulative', angle: 90, position: 'insideRight', fill: '#06b6d4' }}
+            />
             <Tooltip 
               contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
             />
             <Legend />
-            <Bar dataKey="count" name="Publications" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+            <Bar yAxisId="left" dataKey="count" name="Publications" fill="#7c3aed" radius={[4, 4, 0, 0]} />
             <Line 
+              yAxisId="right"
               type="monotone" 
               dataKey="cumulative" 
               name="Cumulative" 
@@ -222,66 +193,11 @@ export default function Statsofpublications() {
               strokeWidth={3}
               dot={{ fill: '#06b6d4', r: 4 }}
             />
-          </AreaChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Row with two charts */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
-        {/* Chart 2: Top Journals */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <BookOpen className="text-purple-600" size={24} />
-            Top Journals/Venues
-          </h2>
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={topJournals} layout="vertical" margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis type="number" tick={{ fill: '#6b7280' }} />
-              <YAxis 
-                type="category" 
-                dataKey="journal" 
-                tick={{ fill: '#6b7280', fontSize: 10 }} 
-                width={120}
-                tickFormatter={(v) => v.length > 20 ? v.substring(0, 20) + '...' : v}
-              />
-              <Tooltip />
-              <Bar dataKey="count" name="Publications" fill="#7c3aed" radius={[0, 4, 4, 0]}>
-                {topJournals.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={PURPLE_COLORS[index % PURPLE_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
 
-        {/* Chart 3: Publications Distribution Pie */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <Users className="text-purple-600" size={24} />
-            Top Contributing Authors
-          </h2>
-          <ResponsiveContainer width="100%" height={350}>
-            <PieChart>
-              <Pie
-                data={topAuthors.slice(0, 8)}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ author, count }) => `${author.substring(0, 10)}: ${count}`}
-                outerRadius={110}
-                dataKey="count"
-                nameKey="author"
-              >
-                {topAuthors.slice(0, 8).map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={PURPLE_COLORS[index % PURPLE_COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
 
       {/* Chart 4: Patents by Year */}
       {patentsByYear.length > 0 && (
@@ -306,43 +222,82 @@ export default function Statsofpublications() {
         </div>
       )}
 
-      {/* Publications Yearly Summary Table */}
+      {/* Publications Yearly Summary Table with Pagination */}
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Yearly Summary</h2>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-purple-800">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-medium text-white">Year</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-white">Publications</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-white">Cumulative</th>
-                <th className="px-6 py-3 text-left text-sm font-medium text-white">Growth</th>
+                <th className="px-6 py-3 text-left text-base font-medium text-white">Year</th>
+                <th className="px-6 py-3 text-left text-base font-medium text-white">Publications</th>
+                <th className="px-6 py-3 text-left text-base font-medium text-white">Cumulative</th>
+                <th className="px-6 py-3 text-left text-base font-medium text-white">Growth</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {cumulativePublications.map((item, idx) => {
-                const prevCount = idx > 0 ? cumulativePublications[idx - 1].count : 0;
-                const growth = prevCount > 0 ? ((item.count - prevCount) / prevCount * 100).toFixed(0) : '-';
-                return (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{item.year}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-purple-700 font-bold">{item.count}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">{item.cumulative}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {growth !== '-' && (
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          parseFloat(growth) >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                        }`}>
-                          {parseFloat(growth) >= 0 ? '+' : ''}{growth}%
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+              {cumulativePublications
+                .slice((yearlyPage - 1) * YEARLY_PER_PAGE, yearlyPage * YEARLY_PER_PAGE)
+                .map((item, idx) => {
+                  const actualIdx = (yearlyPage - 1) * YEARLY_PER_PAGE + idx;
+                  const prevCount = actualIdx > 0 ? cumulativePublications[actualIdx - 1].count : 0;
+                  const growth = prevCount > 0 ? ((item.count - prevCount) / prevCount * 100).toFixed(0) : '-';
+                  return (
+                    <tr key={actualIdx} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap font-medium text-base text-gray-900">{item.year}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-purple-700 font-bold">{item.count}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base text-gray-700">{item.cumulative}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-base">
+                        {growth !== '-' && (
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            parseFloat(growth) >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                          }`}>
+                            {parseFloat(growth) >= 0 ? '+' : ''}{growth}%
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Controls */}
+        {cumulativePublications.length > YEARLY_PER_PAGE && (
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600">
+              Showing {((yearlyPage - 1) * YEARLY_PER_PAGE) + 1} to {Math.min(yearlyPage * YEARLY_PER_PAGE, cumulativePublications.length)} of {cumulativePublications.length} entries
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setYearlyPage(prev => Math.max(prev - 1, 1))}
+                disabled={yearlyPage === 1}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  yearlyPage === 1
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                }`}
+              >
+                Previous
+              </button>
+              <span className="px-3 py-1 text-sm font-medium text-gray-700">
+                Page {yearlyPage} of {Math.ceil(cumulativePublications.length / YEARLY_PER_PAGE)}
+              </span>
+              <button
+                onClick={() => setYearlyPage(prev => Math.min(prev + 1, Math.ceil(cumulativePublications.length / YEARLY_PER_PAGE)))}
+                disabled={yearlyPage >= Math.ceil(cumulativePublications.length / YEARLY_PER_PAGE)}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  yearlyPage >= Math.ceil(cumulativePublications.length / YEARLY_PER_PAGE)
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-purple-100 text-purple-700 hover:bg-purple-200'
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

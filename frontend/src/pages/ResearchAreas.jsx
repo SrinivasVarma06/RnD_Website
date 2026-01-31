@@ -206,9 +206,9 @@ const ResearchAreas = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-purple-800">
             <tr>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Name</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Department</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Areas of Interest</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Name</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Department</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Areas of Interest</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -221,9 +221,9 @@ const ResearchAreas = () => {
             ) : (
               paginatedData.map((prof) => (
                 <tr key={prof.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{prof.ProfName}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{prof.Department}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">
+                  <td className="px-4 py-3 text-base font-medium text-gray-900">{prof.ProfName}</td>
+                  <td className="px-4 py-3 text-base text-gray-700">{prof.Department}</td>
+                  <td className="px-4 py-3 text-base text-gray-700">
                     <ul className="list-disc ml-4 space-y-0.5">
                       {prof.AreaofInterest.map((area) => (
                         <li key={area.id}>{area.Area}</li>

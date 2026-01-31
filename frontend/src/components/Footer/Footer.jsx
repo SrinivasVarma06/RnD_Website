@@ -51,17 +51,19 @@ const Footer = () => {
 
   const linkStyle = {
     color: '#ffffff',
-    fontSize: '16px',
+    fontSize: '14px',
     textDecoration: 'none',
     display: 'block',
-    marginBottom: '10px',
+    marginBottom: '8px',
+    whiteSpace: 'nowrap',
   };
 
   const headingStyle = {
     color: '#fbbf24',
     fontWeight: 'bold',
-    fontSize: '18px',
-    marginBottom: '18px',
+    fontSize: '16px',
+    marginBottom: '14px',
+    whiteSpace: 'nowrap',
   };
 
   return (
@@ -74,45 +76,45 @@ const Footer = () => {
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{ 
           display: 'flex', 
-          flexWrap: 'wrap', 
-          columnGap: '40px',
-          rowGap: '24px',
-          justifyContent: 'flex-start'
+          flexWrap: 'nowrap', 
+          gap: '24px',
+          justifyContent: 'space-between',
+          overflowX: 'auto'
         }}>
           
           {/* Institute Info */}
-          <div style={{ flex: '1', minWidth: '200px', maxWidth: '280px' }}>
-            <h3 style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '20px', marginBottom: '14px' }}>
-              INDIAN INSTITUTE OF TECHNOLOGY DHARWAD
+          <div style={{ flex: '0 0 auto', minWidth: '220px' }}>
+            <h3 style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '18px', marginBottom: '14px', whiteSpace: 'nowrap' }}>
+              INDIAN INSTITUTE OF<br />TECHNOLOGY DHARWAD
             </h3>
-            <p style={{ color: '#ffffff', fontSize: '16px', marginBottom: '6px' }}>PERMANENT CAMPUS</p>
-            <p style={{ color: '#ffffff', fontSize: '16px', marginBottom: '6px' }}>CHIKKAMALLIGAWAD</p>
-            <p style={{ color: '#ffffff', fontSize: '16px', marginBottom: '6px' }}>DHARWAD - 580 011</p>
-            <p style={{ color: '#ffffff', fontSize: '16px', marginBottom: '6px' }}>KARNATAKA</p>
-            <p style={{ color: '#ffffff', fontSize: '16px', marginBottom: '18px' }}>BHARATA (INDIA)</p>
+            <p style={{ color: '#ffffff', fontSize: '14px', marginBottom: '4px' }}>PERMANENT CAMPUS</p>
+            <p style={{ color: '#ffffff', fontSize: '14px', marginBottom: '4px' }}>CHIKKAMALLIGAWAD</p>
+            <p style={{ color: '#ffffff', fontSize: '14px', marginBottom: '4px' }}>DHARWAD - 580 011</p>
+            <p style={{ color: '#ffffff', fontSize: '14px', marginBottom: '4px' }}>KARNATAKA</p>
+            <p style={{ color: '#ffffff', fontSize: '14px', marginBottom: '14px' }}>BHARATA (INDIA)</p>
             
             <div>
               <a 
                 href="mailto:pro@iitdh.ac.in" 
-                style={{ ...linkStyle, display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ ...linkStyle, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}
               >
-                <Mail size={16} color="#ffffff" />
+                <Mail size={14} color="#ffffff" />
                 pro@iitdh.ac.in
               </a>
               <a 
                 href="https://www.iitdh.ac.in/contact"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ ...linkStyle, display: 'flex', alignItems: 'center', gap: '8px' }}
+                style={{ ...linkStyle, display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}
               >
-                <Phone size={16} color="#ffffff" />
+                <Phone size={14} color="#ffffff" />
                 Contact Us
               </a>
             </div>
           </div>
 
           {/* Projects Column */}
-          <div style={{ flex: '0 0 auto', minWidth: '160px' }}>
+          <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>PROJECTS</h4>
             {projectsLinks.map((link) => (
               <a 
@@ -128,7 +130,7 @@ const Footer = () => {
           </div>
 
           {/* Research Column */}
-          <div style={{ flex: '0 0 auto', minWidth: '140px' }}>
+          <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>RESEARCH</h4>
             {researchLinks.map((link) => (
               <a 
@@ -144,7 +146,7 @@ const Footer = () => {
           </div>
 
           {/* People Column */}
-          <div style={{ flex: '0 0 auto', minWidth: '140px' }}>
+          <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>PEOPLE</h4>
             {peopleLinks.map((link) => (
               <a 
@@ -158,9 +160,9 @@ const Footer = () => {
           </div>
 
           {/* Quick Access - 2 columns */}
-          <div style={{ flex: '1', minWidth: '320px' }}>
+          <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>QUICK ACCESS</h4>
-            <div style={{ display: 'flex', gap: '40px' }}>
+            <div style={{ display: 'flex', gap: '24px' }}>
               <div>
                 {quickAccessCol1.map((link) => (
                   <a 

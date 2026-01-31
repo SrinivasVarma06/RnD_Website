@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
-import { Search, Sprout, IndianRupee, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { Search, Sprout, CheckCircle2 } from 'lucide-react';
 
 import './searchresults.css'
 
@@ -195,11 +195,11 @@ export default function Sgnf() {
               const ongoing = isOngoing(item);
               return (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{item["Name "]}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700">{item["Project Title"]}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700"><span className="flex items-center gap-1"><IndianRupee size={14} />{item["Value (₹1,00,000)"]}</span></td>
-                  <td className="px-4 py-3 text-sm text-gray-700"><span className="flex items-center gap-1"><Calendar size={14} />{item["Sanction date"] || "N/A"}</span></td>
-                  <td className="px-4 py-3 text-sm text-gray-700"><span className="flex items-center gap-1"><Clock size={14} />{item["Duration (years)"] || "N/A"} yrs</span></td>
+                  <td className="px-4 py-3 text-sm font-medium text-gray-800">{item["Name "]}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item["Project Title"]}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">₹{item["Value (₹1,00,000)"]} L</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item["Sanction date"] || "N/A"}</td>
+                  <td className="px-4 py-3 text-sm text-gray-800">{item["Duration (years)"] || "N/A"} yrs</td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${ongoing ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'}`}>
                       <CheckCircle2 size={12} />{ongoing ? 'Ongoing' : 'Completed'}

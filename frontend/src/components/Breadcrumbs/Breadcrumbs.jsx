@@ -55,7 +55,7 @@ const Breadcrumbs = () => {
   return (
     <nav 
       aria-label="Breadcrumb" 
-      className="px-4 md:px-8 py-3 bg-white border-b border-gray-100"
+      className="px-4 md:px-8 py-3 bg-white border-b border-gray-100 sticky top-[70px] z-30 shadow-sm"
     >
       <ol className="flex items-center flex-wrap gap-1 text-sm">
         {/* Home link */}

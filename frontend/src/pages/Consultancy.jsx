@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
+import EmptyState from '../components/EmptyState/EmptyState';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
-import { Search, Briefcase, IndianRupee, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { Search, Briefcase, CheckCircle2 } from 'lucide-react';
 import './searchresults.css';
 
 export default function Consultancy() {
@@ -22,19 +23,22 @@ export default function Consultancy() {
 
   const SHEET_API_URL = "https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1";
 
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(SHEET_API_URL);
+      const jsonData = await response.json();
+      setDoc(jsonData);
+    } catch (err) {
+      console.error("Failed to fetch data from Google Sheet:", err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(SHEET_API_URL);
-        const jsonData = await response.json();
-        setDoc(jsonData);
-      } catch (err) {
-        console.error("Failed to fetch data from Google Sheet:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
@@ -162,9 +166,13 @@ export default function Consultancy() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 text-red-600 text-center">
-        <p className="text-xl font-semibold">Error: {error.message}</p>
-        <p className="text-sm mt-2">Please check your internet connection.</p>
+      <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+        <EmptyState
+          type="error"
+          title="Failed to load projects"
+          message="We couldn't fetch the consultancy projects data. Please check your connection and try again."
+          onRetry={fetchData}
+        />
       </div>
     );
   }
@@ -243,23 +251,29 @@ export default function Consultancy() {
 
       {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
+        {/* Mobile scroll hint */}
+        <p className="sm:hidden text-center text-sm text-gray-500 py-2">← Scroll horizontally to see more →</p>
+        <table className="min-w-full divide-y divide-gray-200 table-zebra">
           <thead className="bg-purple-800">
             <tr>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Title</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Principal Investigator</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Industry</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Sanction Date</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Duration</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Value</th>
-              <th className="px-4 py-3.5 text-left text-sm md:text-base font-semibold text-white">Status</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Title</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Principal Investigator</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Industry</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Sanction Date</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Duration</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Value</th>
+              <th className="px-4 py-3.5 text-left text-base font-semibold text-white">Status</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan="7" className="px-4 py-8 text-center text-gray-500">
-                  No projects found matching your criteria
+                <td colSpan="7" className="p-0">
+                  <EmptyState
+                    type="no-results"
+                    title="No projects found"
+                    message="Try adjusting your search or filters to find what you're looking for."
+                  />
                 </td>
               </tr>
             ) : (
@@ -267,22 +281,13 @@ export default function Consultancy() {
                 const ongoing = isOngoing(item);
                 return (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{item["Title"]}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{item["Investigator(s)"]}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">{item["Sponsoring Organization"]}</td>
-                    <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                      <span className="flex items-center gap-1"><Calendar size={14} />{item["Sanction date"] || "N/A"}</span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                      <span className="flex items-center gap-1"><Clock size={14} />{item["Duration (years)"] || "N/A"} mo</span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
-                      <span className="flex items-center gap-1">
-                        <IndianRupee size={14} />
-                        {(parseFloat(item["Value (₹1,00,000)"]) * 100000).toLocaleString("en-IN")}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm">
+                    <td className="px-4 py-3 text-base font-medium text-gray-800">{item["Title"]}</td>
+                    <td className="px-4 py-3 text-base text-gray-800">{item["Investigator(s)"]}</td>
+                    <td className="px-4 py-3 text-base text-gray-800">{item["Sponsoring Organization"]}</td>
+                    <td className="px-4 py-3 text-base text-gray-800 whitespace-nowrap">{item["Sanction date"] || "N/A"}</td>
+                    <td className="px-4 py-3 text-base text-gray-800 whitespace-nowrap">{item["Duration (years)"] || "N/A"} mo</td>
+                    <td className="px-4 py-3 text-base text-gray-800 whitespace-nowrap">₹{(parseFloat(item["Value (₹1,00,000)"]) * 100000).toLocaleString("en-IN")}</td>
+                    <td className="px-4 py-3 text-base">
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                         ongoing ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700'
                       }`}>

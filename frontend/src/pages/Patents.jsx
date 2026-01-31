@@ -95,7 +95,7 @@ const Patents = () => {
                                 {Object.keys(patentData[0]).map((key) => (
                                     <th
                                         key={key}
-                                        className="px-6 py-2 text-left text-sm font-medium text-white uppercase tracking-wider"
+                                        className="px-6 py-3.5 text-left text-base font-semibold text-white"
                                     >
                                         {key}
                                     </th>
@@ -105,11 +105,11 @@ const Patents = () => {
                     )}
                     <tbody className="bg-white divide-y divide-gray-200">
                         {patentData.map((item, idx) => (
-                            <tr key={idx}>
+                            <tr key={idx} className="hover:bg-gray-50">
                                 {Object.keys(patentData[0]).map((key, i) => (
                                     <td
                                         key={i}
-                                        className="px-6 py-4 whitespace-normal text-sm text-gray-700"
+                                        className="px-6 py-4 whitespace-normal text-base text-gray-700"
                                     >
                                         {item[key]}
                                     </td>

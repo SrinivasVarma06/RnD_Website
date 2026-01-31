@@ -288,3 +288,180 @@ input.MuiInputBase-input {
 a, button, input, select, textarea {
   transition: all 0.2s ease-out;
 }
+
+/* ========================================
+   Enhanced Table Styles
+   ======================================== */
+
+/* Zebra striping for tables */
+.table-zebra tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.table-zebra tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* Sticky table headers */
+.table-sticky-header thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-sticky-header thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: inherit;
+}
+
+/* Combined sticky header below topbar and breadcrumbs */
+.table-sticky-header-offset thead {
+  position: sticky;
+  top: 110px; /* 70px topbar + ~40px breadcrumbs */
+  z-index: 10;
+}
+
+/* ========================================
+   Mobile Scroll Indicators
+   ======================================== */
+
+.scroll-container {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-container::before,
+.scroll-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-container::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+}
+
+.scroll-container::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+}
+
+.scroll-container.show-scroll-right::after {
+  opacity: 1;
+}
+
+.scroll-container.show-scroll-left::before {
+  opacity: 1;
+}
+
+/* Mobile scroll hint */
+@media (max-width: 768px) {
+  .scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+  }
+  
+  .scroll-hint::before {
+    content: '←';
+  }
+  
+  .scroll-hint::after {
+    content: '→';
+  }
+}
+
+/* ========================================
+   Button Hover Effects
+   ======================================== */
+
+.btn-primary {
+  background-color: #7c3aed;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #6d28d9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.2);
+}
+
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   Card Hover Effects
+   ======================================== */
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   Empty States
+   ======================================== */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.empty-state-icon {
+  margin-bottom: 1rem;
+  color: #9ca3af;
+}
+
+.empty-state-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-message {
+  color: #6b7280;
+  max-width: 24rem;
+}
