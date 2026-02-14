@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-
-const CACHE_EXPIRY = 5 * 60 * 1000;
+import { getApiUrl } from '../config/api';
 
 export default function Forms() {
 
@@ -11,29 +10,16 @@ export default function Forms() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const cacheKey = 'formsDataCache';
-    const cacheTimestampKey = 'formsDataCacheTimestamp';
-
     const loadData = async () => {
-      const cached = localStorage.getItem(cacheKey);
-      const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
-
-      if (cached && cachedTimestamp && Date.now() - Number(cachedTimestamp) < CACHE_EXPIRY) {
-        setFormData(JSON.parse(cached));
+      try {
+        const response = await axios.get(getApiUrl('forms'));
+        const items = response.data || [];
+        setFormData(items);
+      } catch (err) {
+        console.error('Failed to fetch Forms data', err);
+        setError(err);
+      } finally {
         setLoading(false);
-      } else {
-        try {
-          const response = await axios.get(`https://opensheet.vercel.app/1zmpwBGzv6VtYhkiosMQfJ3YE3-8CNiGAUP0tiNEX_rU/Sheet1`);
-          const items = response.data || [];
-          setFormData(items);
-          localStorage.setItem(cacheKey, JSON.stringify(items));
-          localStorage.setItem(cacheTimestampKey, Date.now().toString());
-        } catch (err) {
-          console.error('Failed to fetch Forms data', err);
-          setError(err);
-        } finally {
-          setLoading(false);
-        }
       }
     };
 

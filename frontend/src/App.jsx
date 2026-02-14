@@ -10,6 +10,7 @@ import PageSkeleton from './components/LoadingSkeleton/PageSkeleton';
 import "./pages/labs/nodata.css";
 import LabSubNavbar from './components/labnav';
 import AdminGate from "./admin/adminGate";
+import { SheetStatusProvider } from './context/SheetStatusContext';
 
 // Lazy load ALL pages for better code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -48,6 +49,7 @@ const Civil = lazy(() => import('./pages/labs/civil'));
 const Eece = lazy(() => import('./pages/labs/ece'));
 const Feedback = lazy(() => import('./pages/feedback'));
 const Opportunities = lazy(() => import('./pages/Opportunities'));
+const DynamicSheetPage = lazy(() => import('./pages/DynamicSheetPage'));
 
 // ScrollToTop logic inside App.jsx
 function ScrollToTop() {
@@ -70,6 +72,7 @@ function App() {
   };
 
   return (
+    <SheetStatusProvider>
     <div className="min-h-screen bg-gray-50 overflow-hidden flex flex-col">
       <Topbar 
         toggleMobileMenu={toggleMobileMenu} 
@@ -142,6 +145,10 @@ function App() {
                 <Route path="/Labs/chemicaleng" element={<Cheeng />} />
                 <Route path="/Labs/physics" element={<Phy />} />
                 <Route path="/Labs/mathematics" element={<Maths />} />
+                {/* Dynamic sheets added via Admin panel */}
+                <Route path="/sheet/:sheetKey" element={<DynamicSheetPage />} />
+                <Route path="/Projects/:sheetKey" element={<DynamicSheetPage />} />
+                <Route path="/Committees/:sheetKey" element={<DynamicSheetPage />} />
               </Routes>
             </Suspense>
           </div>
@@ -150,6 +157,7 @@ function App() {
         </div>
       </div>
     </div>
+    </SheetStatusProvider>
   );
 }
 

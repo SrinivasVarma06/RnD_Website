@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageSkeleton from "../..//components/LoadingSkeleton/PageSkeleton" 
+import { getApiUrl } from '../../config/api';
 import {
   Typography,
   TextField,
@@ -25,7 +26,7 @@ export default function Ece() {
 
 
 
-const SHEET_API_URL = "https://opensheet.elk.sh/1DlYPfxatycmVxRC8N38MlXXEcU8HDcULfwCFG8WbIVw/EECE"
+const SHEET_API_URL = getApiUrl('lab-ece')
 
     
       useEffect(() => {

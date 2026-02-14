@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { TrendingUp, Building2, Calendar, IndianRupee, PieChartIcon, BarChart3 } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 const PURPLE_COLORS = ['#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#6d28d9', '#5b21b6', '#4c1d95'];
 const PROJECT_COLORS = { sponsored: '#7c3aed', consultancy: '#06b6d4', csr: '#10b981', sgnf: '#f59e0b' };
@@ -17,10 +18,10 @@ export default function Statsofprojects() {
   const [sgnfData, setSgnfData] = useState([]);
 
   const URLS = {
-    sponsored: "https://opensheet.elk.sh/1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o/Sheet1",
-    consultancy: "https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1",
-    csr: "https://opensheet.vercel.app/1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM/Sheet1",
-    sgnf: "https://opensheet.elk.sh/1JQ_9Xh9aPNnklv7_iP0ihVUztYd4Rs2ZnumybaJrf7c/Sheet1"
+    sponsored: getApiUrl('sponsored'),
+    consultancy: getApiUrl('consultancy'),
+    csr: getApiUrl('csr'),
+    sgnf: getApiUrl('sgnf')
   };
 
   useEffect(() => {

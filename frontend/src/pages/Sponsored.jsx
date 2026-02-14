@@ -3,6 +3,7 @@ import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import EmptyState from '../components/EmptyState/EmptyState';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import { Search, TrendingUp, CheckCircle2, RefreshCw } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 import './searchresults.css';
 
 export default function Sponsored() {
@@ -21,13 +22,11 @@ export default function Sponsored() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_API_URL = "https://opensheet.elk.sh/1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o/Sheet1";
-
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(SHEET_API_URL);
+      const response = await fetch(getApiUrl('sponsored'));
       const jsonData = await response.json();
       setDoc(jsonData);
     } catch (err) {

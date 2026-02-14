@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import MyDropdownNav from './MyDropdownNav';
+
 const Stats = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -38,11 +38,11 @@ const Stats = () => {
             <button
                 type="button"
                 className={`
-                    py-2 pl-3 font-medium block w-full text-left
-                    rounded-lg transition-all duration-400 cursor-pointer
-                    text-gray-700 hover:bg-slate-100 border border-transparent // Always apply these
-                    focus:outline-none focus:bg-slate-100
-                    flex items-center space-x-1 // Ensure text and icon are side-by-side with spacing
+                    py-2.5 pl-4 font-medium block w-full text-left
+                    rounded-lg transition-all duration-200 cursor-pointer
+                    text-gray-800 hover:bg-slate-50 hover:text-purple-600
+                    focus:outline-none
+                    flex items-center space-x-1
                 `}
                 onClick={() => setIsOpen(!isOpen)} // This is the primary trigger now
                 aria-haspopup="true"

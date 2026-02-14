@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-
+import { getApiUrl } from '../config/api';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import EmptyState from '../components/EmptyState/EmptyState';
 import Pagination from '../components/ProjectFilters/Pagination';
 
-const CACHE_EXPIRY = 5 * 60 * 1000;
 const ITEMS_PER_PAGE = 15;
 
 export default function Documents() {
@@ -14,34 +13,19 @@ export default function Documents() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const loadData = useCallback(async (skipCache = false) => {
-    const cacheKey = 'docsDataCache';
-    const cacheTimestampKey = 'docsDataCacheTimestamp';
-    
+  const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    const cached = localStorage.getItem(cacheKey);
-    const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
-
-    if (!skipCache && cached && cachedTimestamp && Date.now() - Number(cachedTimestamp) < CACHE_EXPIRY) {
-      setDocsData(JSON.parse(cached));
+    try {
+      const response = await axios.get(getApiUrl('documents'));
+      const items = response.data || [];
+      setDocsData(items);
+    } catch (err) {
+      console.error('Failed to fetch Documents data', err);
+      setError(err);
+    } finally {
       setLoading(false);
-    } else {
-      try {
-        const response = await axios.get(`https://opensheet.vercel.app/1RG3VNFWNk8tnVrsNmk3-cf1Pko3lQIofwRyZonQmVg0/Sheet1`);
-        const items = response.data || [];
-
-        setDocsData(items);
-
-        localStorage.setItem(cacheKey, JSON.stringify(items));
-        localStorage.setItem(cacheTimestampKey, Date.now().toString());
-      } catch (err) {
-        console.error('Failed to fetch Forms data', err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
     }
   }, []);
 

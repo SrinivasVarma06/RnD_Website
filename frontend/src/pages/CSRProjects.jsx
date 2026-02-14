@@ -3,6 +3,7 @@ import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import axios from 'axios';
 import { Search, Target, CheckCircle2 } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 import './searchresults.css';
 
 export default function CSR() {
@@ -25,7 +26,7 @@ export default function CSR() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("https://opensheet.vercel.app/1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM/Sheet1");
+        const res = await axios.get(getApiUrl('csr'));
         setInfo(res.data);
       } catch (err) {
         console.error(err);

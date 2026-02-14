@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { BookOpen, TrendingUp, Calendar, Award, FileText } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 
 
@@ -16,8 +17,8 @@ export default function Statsofpublications() {
   const YEARLY_PER_PAGE = 10;
 
   const URLS = {
-    publications: "https://opensheet.vercel.app/10P7vgxarVBixJkawH_SrFf3FaITKWeNLkc2rwPj0aoo/Sheet1",
-    patents: "https://opensheet.vercel.app/1GwrkMQ6uIeKmUU8yhEpZce-cTnGDcvNlj6KwYR6CrBE/Sheet1"
+    publications: getApiUrl('publications'),
+    patents: getApiUrl('patents')
   };
 
   useEffect(() => {

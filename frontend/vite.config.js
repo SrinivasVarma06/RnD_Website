@@ -9,7 +9,13 @@ export default defineConfig({
   ],
   server: {
     port: 3715,       
-    host: true,       
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3716',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     port: 3715,      

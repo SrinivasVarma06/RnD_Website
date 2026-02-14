@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
-
-const CACHE_EXPIRY = 5 * 60 * 1000;
-// CSR data now fetched from Google Sheets
-const CSR_SHEET_URL = 'https://opensheet.elk.sh/1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM/Sheet1';
+import { getApiUrl } from '../config/api';
 
 export default function Csr() {
   const [showModal, setShowModal] = useState(false);
@@ -16,29 +13,16 @@ export default function Csr() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const cacheKey = 'csrDataCache';
-    const cacheTimestampKey = 'csrDataCacheTimestamp';
-
     const loadData = async () => {
-      const cached = localStorage.getItem(cacheKey);
-      const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
-
-      if (cached && cachedTimestamp && Date.now() - Number(cachedTimestamp) < CACHE_EXPIRY) {
-        setCsrData(JSON.parse(cached));
+      try {
+        const response = await axios.get(getApiUrl('csr'));
+        const items = response.data || [];
+        setCsrData(items);
+      } catch (err) {
+        console.error('Failed to fetch CSR data', err);
+        setError(err);
+      } finally {
         setLoading(false);
-      } else {
-        try {
-          const response = await axios.get(CSR_SHEET_URL);
-          const items = response.data || [];
-          setCsrData(items);
-          localStorage.setItem(cacheKey, JSON.stringify(items));
-          localStorage.setItem(cacheTimestampKey, Date.now().toString());
-        } catch (err) {
-          console.error('Failed to fetch CSR data', err);
-          setError(err);
-        } finally {
-          setLoading(false);
-        }
       }
     };
 

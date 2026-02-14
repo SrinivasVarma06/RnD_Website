@@ -2,10 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { Pagination } from '../components/ProjectFilters';
 import { Search, Filter, X, ChevronDown, Megaphone } from 'lucide-react';
-
-const CACHE_KEY = 'cachedOpportunities';
-const CACHE_TIMESTAMP_KEY = 'opportunitiesCacheTimestamp';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in ms
+import { getApiUrl } from '../config/api';
 
 const Opportunities = () => {
     const [opportunities, setOpportunities] = useState([]);
@@ -25,9 +22,7 @@ const Opportunities = () => {
         const fetchOpportunities = async () => {
             try {
                 setIsLoading(true);
-                const res = await fetch(
-                    'https://opensheet.vercel.app/1t352KbG0gFpu_QK7BVjBrcwLy5Kthq4JmHRy_AtVHUM/Sheet1'
-                );
+                const res = await fetch(getApiUrl('opportunities'));
                 const data = await res.json();
                 const today = new Date();
 
@@ -40,9 +35,6 @@ const Opportunities = () => {
                     return isRolling || isFutureDate;
                 });
 
-                localStorage.setItem(CACHE_KEY, JSON.stringify(filtered));
-                localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-
                 setOpportunities(filtered);
             } catch (err) {
                 console.error('Error fetching opportunities:', err);
@@ -52,20 +44,7 @@ const Opportunities = () => {
             }
         };
 
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        const cacheTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-        const now = Date.now();
-
-        if (
-            cachedData &&
-            cacheTimestamp &&
-            now - parseInt(cacheTimestamp, 10) < CACHE_DURATION
-        ) {
-            setOpportunities(JSON.parse(cachedData));
-            setIsLoading(false);
-        } else {
-            fetchOpportunities();
-        }
+        fetchOpportunities();
     }, []);
 
     // Extract unique agencies

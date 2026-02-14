@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Search, BookOpen, Users, Building2 } from 'lucide-react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { Pagination } from '../components/ProjectFilters';
+import { getApiUrl } from '../config/api';
 
 const normalize = (str) => str?.toLowerCase().replace(/\s+/g, '') || '';
 
@@ -19,9 +20,7 @@ const ResearchAreas = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `https://opensheet.elk.sh/1L4vUCsuD0Qn6UjloNVOMMmaMl37YaWIl2MFOZIMG5ps/Sheet1`
-        );
+        const response = await axios.get(getApiUrl('research-areas'));
         const rawData = response.data || [];
         const allData = rawData
           .filter(row => row['ProfName'] || row['Name'])

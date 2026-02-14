@@ -3,6 +3,7 @@ import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import { Search, Award, CheckCircle2 } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 
 export default function Fellowship() {
     const [info, setInfo] = useState([]);
@@ -19,75 +20,12 @@ export default function Fellowship() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
-    const SPREADSHEET_ID = '1ebO7W5s2yQEWFcNnhX5Jr2n4tMwzspFc';
-    const GID = '1256952165';
-    const CSV_EXPORT_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${GID}`;
-
-    const sanitizeHeader = (header) => {
-        if (header.includes('Value') && header.includes('₹1,00,000')) {
-            return 'value_inr_lakh';
-        }
-        if (header.includes('Sanction date')) {
-            return 'sanction_date';
-        }
-        if (header.includes('Duration (years)')) {
-            return 'duration_years';
-        }
-        return header
-            .trim()
-            .replace(/[^a-zA-Z0-9_]+/g, '_')
-            .replace(/_+/g, '_')
-            .toLowerCase();
-    };
-
-    const parseCsvLine = (line) => {
-        const result = [];
-        let inQuote = false;
-        let currentField = '';
-
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                inQuote = !inQuote;
-                if (inQuote && i > 0 && line[i - 1] === '"') {
-                    currentField += '"';
-                }
-            } else if (char === ',' && !inQuote) {
-                result.push(currentField.trim());
-                currentField = '';
-            } else {
-                currentField += char;
-            }
-        }
-        result.push(currentField.trim());
-        return result;
-    };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(CSV_EXPORT_URL);
-                const csvText = res.data;
-
-                const lines = csvText.split('\n').filter(line => line.trim() !== '');
-                if (lines.length === 0) {
-                    throw new Error("No data found in the CSV file.");
-                }
-
-                const rawHeaders = parseCsvLine(lines[0]);
-                const headers = rawHeaders.map(sanitizeHeader);
-
-                const parsedData = lines.slice(1).map(line => {
-                    const values = parseCsvLine(line);
-                    let obj = {};
-                    headers.forEach((header, index) => {
-                        obj[header] = (values[index] || '').trim();
-                    });
-                    return obj;
-                }).filter(item => Object.values(item).some(val => val !== ''));
-
-                setInfo(parsedData);
+                const res = await axios.get(getApiUrl('fellowship'));
+                setInfo(res.data || []);
             } catch (err) {
                 console.error("Failed to fetch fellowship documents:", err);
                 setError(err);
@@ -97,7 +35,7 @@ export default function Fellowship() {
         };
 
         fetchData();
-    }, [CSV_EXPORT_URL]);
+    }, []);
 
     function parseDateStr(dateStr) {
         if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;

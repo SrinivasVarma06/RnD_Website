@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import { Search, Sprout, CheckCircle2 } from 'lucide-react';
-
+import { getApiUrl } from '../config/api';
 import './searchresults.css'
 
 export default function Sgnf() {
@@ -20,12 +20,10 @@ export default function Sgnf() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_API_URL = "https://opensheet.elk.sh/1JQ_9Xh9aPNnklv7_iP0ihVUztYd4Rs2ZnumybaJrf7c/Sheet1";
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(SHEET_API_URL);
+        const response = await fetch(getApiUrl('sgnf'));
         const jsonData = await response.json();
         setDoc(jsonData);
       } catch (err) {

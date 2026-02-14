@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import AltCarousel from '../components/Carousel/AltCarousel';
 import StatisticsDashboard from '../components/StatisticsDashboard/StatisticsDashboard';
+import { getApiUrl } from '../config/api';
 
-// Google Sheet for carousel images - admins can add/remove images by editing the sheet
+// Carousel images come from a Google Sheet containing Google Drive URLs
 // Sheet: https://docs.google.com/spreadsheets/d/1vWcPPCIsbXw0O8zwvjXAkXn0Hg7zY0pUWwUCJ_jTkjc/edit
-// Tab name: "Carousel Images"
 // IMPORTANT: Each image in Google Drive must be shared as "Anyone with the link" → Viewer
-const CAROUSEL_SHEET_URL = 'https://opensheet.vercel.app/1vWcPPCIsbXw0O8zwvjXAkXn0Hg7zY0pUWwUCJ_jTkjc/Carousel%20Images';
 
 // Convert Google Drive share URL to direct image URL using lh3.googleusercontent.com (more reliable)
 const convertToDriveDirectUrl = (url) => {
@@ -43,7 +42,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCarouselImages = async () => {
             try {
-                const response = await fetch(CAROUSEL_SHEET_URL);
+                const response = await fetch(getApiUrl('carousel'));
                 if (!response.ok) throw new Error('Failed to fetch');
                 
                 const data = await response.json();

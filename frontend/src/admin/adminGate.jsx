@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from "react";
 import AdminPanel from "./AdminPanel";
+import { adminLogin, adminVerify, adminLogout } from "../config/api";
 
 export default function AdminGate() {
   const [authorized, setAuthorized] = useState(false);
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
+  // On mount, verify existing token
   useEffect(() => {
-    const isAdmin = sessionStorage.getItem("admin_authenticated");
-    if (isAdmin === "true") {
-      setAuthorized(true);
-    }
+    adminVerify().then((valid) => {
+      if (valid) setAuthorized(true);
+      setLoading(false);
+    });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
-      sessionStorage.setItem("admin_authenticated", "true");
+    try {
+      await adminLogin(password);
       setAuthorized(true);
-    } else {
-      alert("Invalid admin password");
+    } catch (err) {
+      setError(err.message || "Invalid admin password");
     }
   };
 
+  const handleLogout = async () => {
+    await adminLogout();
+    setAuthorized(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Verifying session...</div>
+      </div>
+    );
+  }
+
   if (authorized) {
-    return <AdminPanel onLogout={() => setAuthorized(false)} />;
+    return <AdminPanel onLogout={handleLogout} />;
   }
 
   return (
@@ -36,6 +54,12 @@ export default function AdminGate() {
         <p className="text-sm text-gray-500 text-center mb-6">
           Authorized personnel only
         </p>
+
+        {error && (
+          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <input

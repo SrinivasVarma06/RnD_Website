@@ -3,6 +3,7 @@ import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import EmptyState from '../components/EmptyState/EmptyState';
 import { ProjectFilters, Pagination } from '../components/ProjectFilters';
 import { Search, Briefcase, CheckCircle2 } from 'lucide-react';
+import { getApiUrl } from '../config/api';
 import './searchresults.css';
 
 export default function Consultancy() {
@@ -21,13 +22,11 @@ export default function Consultancy() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_API_URL = "https://opensheet.elk.sh/1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ/Sheet1";
-
   const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(SHEET_API_URL);
+      const response = await fetch(getApiUrl('consultancy'));
       const jsonData = await response.json();
       setDoc(jsonData);
     } catch (err) {

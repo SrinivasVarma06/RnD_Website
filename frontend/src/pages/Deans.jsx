@@ -3,6 +3,7 @@ import axios from "axios";
 import { Search, Award } from 'lucide-react';
 import PageSkeleton from "../components/LoadingSkeleton/PageSkeleton";
 import { Pagination } from '../components/ProjectFilters';
+import { getApiUrl } from '../config/api';
 
 const Deans = () => {
   const [data, setData] = useState([]);
@@ -14,7 +15,7 @@ const Deans = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
-    axios.get("https://opensheet.elk.sh/1gcvBIaxeUtNLoqsTKuCZsxFWONsIF58kI8RtKyqJ7jk/Sheet1")
+    axios.get(getApiUrl('deans'))
       .then(res => {
         setData(res.data || []);
         setLoading(false);

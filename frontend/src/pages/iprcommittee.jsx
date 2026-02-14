@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Search, Users, Scale } from 'lucide-react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { Pagination } from '../components/ProjectFilters';
+import { getApiUrl } from '../config/api';
 
 export default function Ipr() {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ export default function Ipr() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_URL = 'https://opensheet.elk.sh/14Xz-Gg74ERDRkFMT_ocq0NWsnRwMDUFSBb8ooZSduiQ/Sheet1';
+  const SHEET_URL = getApiUrl('ipr');
 
   useEffect(() => {
     const fetchData = async () => {

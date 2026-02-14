@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageSkeleton from "../..//components/LoadingSkeleton/PageSkeleton" 
+import { getApiUrl } from '../../config/api';
 import {
   Typography,
   TextField,
@@ -25,7 +26,7 @@ export default function Chemistry() {
 
 
 
-const SHEET_API_URL = "https://opensheet.elk.sh/1WhxVoG-kv62pww7y_GY0LrkNi0YLyUNhxP1UOu6Tm9k/Chemistry"
+const SHEET_API_URL = getApiUrl('lab-chemistry')
 
     
       useEffect(() => {

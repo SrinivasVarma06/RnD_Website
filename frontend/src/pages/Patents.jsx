@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import axios from 'axios';
+import { getApiUrl } from '../config/api';
 import "./searchresults.css"
-
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1-v5ne-TsrgHOGDlcBMoGugzE_vO8H93kgWXtHNkYnZM/export?format=csv&gid=0';
 
 const Patents = () => {
     const [patentData, setPatentData] = useState([]);
@@ -16,7 +15,7 @@ const Patents = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get("https://opensheet.vercel.app/1GwrkMQ6uIeKmUU8yhEpZce-cTnGDcvNlj6KwYR6CrBE/Sheet1");
+                const res = await axios.get(getApiUrl('patents'));
                 setPatentData(res.data); // reverse for latest first, optional
             } catch (error) {
                 console.error(error); // optional logging
@@ -31,10 +30,9 @@ const Patents = () => {
     useEffect(() => {
         const fetchNumber = async () => {
         try {
-            const response = await axios.get(GOOGLE_SHEET_CSV_URL);
+            const response = await axios.get(getApiUrl('patents-count'));
             const csvString = response.data;
-            //const trimmedString = csvString.trim();
-            const parsedNumber = parseFloat(csvString);
+            const parsedNumber = typeof csvString === 'object' && csvString.count != null ? csvString.count : parseFloat(csvString);
 
             if (!isNaN(parsedNumber)) {
             setNumber(parsedNumber);

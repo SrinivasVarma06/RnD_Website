@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Users, ShieldCheck } from 'lucide-react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { Pagination } from '../components/ProjectFilters';
+import { getApiUrl } from '../config/api';
 
 export default function Biosafety() {
   const [members, setMembers] = useState([]);
@@ -12,7 +13,7 @@ export default function Biosafety() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_URL = 'https://opensheet.elk.sh/1eSLx7mpxl18s9tbPviwM4iTYCxNQSZOfe3S_Lf4gWn0/Sheet1';
+  const SHEET_URL = getApiUrl('biosafety');
 
   useEffect(() => {
     const fetchMembers = async () => {

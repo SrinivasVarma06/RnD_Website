@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageSkeleton from "../..//components/LoadingSkeleton/PageSkeleton" 
+import { getApiUrl } from '../../config/api';
 import {
   Typography,
   TextField,
@@ -25,7 +26,7 @@ export default function Physics() {
 
 
 
-const SHEET_API_URL = "https://opensheet.elk.sh/1F4QnT9Uq8l-bW42DHLDG32yfkQpzAOjCLwf_ASadZ3o/Physics"
+const SHEET_API_URL = getApiUrl('lab-physics')
 
     
       useEffect(() => {

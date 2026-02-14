@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Users, Shield } from 'lucide-react';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import { Pagination } from '../components/ProjectFilters';
+import { getApiUrl } from '../config/api';
 
 export default function Ethicscommitte() {
   const [doc, setDoc] = useState([]);
@@ -12,7 +13,7 @@ export default function Ethicscommitte() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const SHEET_URL = 'https://opensheet.elk.sh/1mpZ4L867iqx-47amKA8PVSdYpub2naAYmQ-mzFXYCNc/Sheet1';
+  const SHEET_URL = getApiUrl('ethics');
 
   useEffect(() => {
     const fetchData = async () => {

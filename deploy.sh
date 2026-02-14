@@ -10,14 +10,16 @@ git pull origin main
 echo "🔹 Applying stashed changes..."
 git stash pop || true   # '|| true' prevents errors if there's nothing to pop
 
-echo "🔹 Restoring specific files..."
-git restore backend/types/generated/components.d.ts backend/types/generated/contentTypes.d.ts
+echo "🔹 Installing backend dependencies..."
+cd backend/data-api
+npm install
+cd ../..
 
-echo "🔹 Applying stash again (if needed)..."
-git stash pop || true
+echo "🔹 Installing frontend dependencies..."
+cd frontend
+npm install
 
 echo "🔹 Building frontend..."
-cd frontend
 npm run build
 
 echo "✅ Deployment script finished successfully!"

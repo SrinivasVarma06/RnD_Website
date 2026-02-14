@@ -5,6 +5,7 @@ import {
 import LinkIcon from "@mui/icons-material/Link";
 import axios from "axios";
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
+import { getApiUrl } from '../config/api';
 
 const PAGE_SIZE = 10;
 
@@ -19,7 +20,7 @@ export default function PublicationsList() {
   useEffect(()=>{
     setLoading(true);
     axios
-    .get("https://opensheet.vercel.app/10P7vgxarVBixJkawH_SrFf3FaITKWeNLkc2rwPj0aoo/Sheet1")
+    .get(getApiUrl('publications'))
     .then((res) => {
       setPublications(res.data); // reverse for latest first, optional
       setLoading(false);

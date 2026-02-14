@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 /* ========================================
    Typography System - IIT Dharwad R&D Website

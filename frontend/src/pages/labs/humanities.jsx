@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageSkeleton from "../..//components/LoadingSkeleton/PageSkeleton" 
+import { getApiUrl } from '../../config/api';
 import {
   Typography,
   TextField,
@@ -27,7 +28,7 @@ export default function Humanities() {
 
 
 
-const SHEET_API_URL = "https://opensheet.elk.sh/1YOnB2D9WJuk0WCO2qU0JZNcFitS_8aTSvbhdQDzWh9E/HEART"
+const SHEET_API_URL = getApiUrl('lab-humanities')
 
     
       useEffect(() => {

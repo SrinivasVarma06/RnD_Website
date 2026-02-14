@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PageSkeleton from "../components/LoadingSkeleton/PageSkeleton";
 import DOMPurify from "dompurify";
+import { getContentUrl } from '../config/api';
 
 const Message = () => {
   const [docContent, setDocContent] = useState("");
@@ -9,19 +10,16 @@ const Message = () => {
 
   useEffect(() => {
     const fetchPublicGoogleDocContent = async () => {
-      const fileId = "1erNNTzZQF3MTEzao2Sr2hRA7wp_HwohI9Ah9yiAzjPU";
-      const exportUrl = `https://docs.google.com/document/d/${fileId}/export?format=html`;
-
       try {
-        const response = await fetch(exportUrl);
+        const response = await fetch(getContentUrl('dean-message'));
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const htmlContent = await response.text();
-        setDocContent(DOMPurify.sanitize(htmlContent));
+        const data = await response.json();
+        setDocContent(DOMPurify.sanitize(data.html));
       } catch (err) {
         setError(err);
-        console.error("Failed to fetch public Google Doc content:", err);
+        console.error("Failed to fetch Dean's message:", err);
       } finally {
         setLoading(false);
       }

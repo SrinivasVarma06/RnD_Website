@@ -5,11 +5,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import Deans from './Deans.jsx';
-
-// Using opensheet.vercel.app as alternative API
-// Make sure the Google Sheet is publicly shared (Anyone with the link can view)
-// Tab name is "json" (visible at bottom of spreadsheet)
-const API_URL = "https://opensheet.vercel.app/1DPFcbQFTMe5AsEHycc25MDc-SlvfJhli8taVGR8mORU/json";
+import { getApiUrl } from '../config/api';
 
 // Navigation Card Component
 const NavCard = ({ title, icon, targetId }) => {
@@ -229,20 +225,10 @@ const People = () => {
   // console.log("staff" + staffMembers)
 
   useEffect(() => {
-    // Try cache first
-    const cached = localStorage.getItem("people_cache_v1");
-    if (cached) {
-      setAllPeople(JSON.parse(cached));
-      setLoading(false);
-    }
-
-    // Always update in background
     axios
-      .get(API_URL)
+      .get(getApiUrl('people'))
       .then((res) => {
-        // OpenSheet returns flat array directly
         const rawData = res.data || [];
-        // Transform: convert 'null' strings to actual null
         const fetched = rawData.map((p, idx) => ({
           id: idx,
           name: p.name || '',
@@ -254,13 +240,12 @@ const People = () => {
           expertise: (p.expertise && p.expertise !== 'null') ? p.expertise : ''
         }));
         setAllPeople(fetched);
-        localStorage.setItem("people_cache_v1", JSON.stringify(fetched));
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
         setError(err);
-        if (!cached) setAllPeople([]); // No data at all
+        setAllPeople([]);
       });
   }, []);
 

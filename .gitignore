@@ -1,1 +1,40 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment files (contain secrets — never commit!)
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+frontend/dist/
+backend/data-api/dist/
+
+# Editors & OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Strapi
+backend/.tmp/
+backend/.cache/
+backend/build/
+backend/.strapi-updater.json
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+
+# Runtime-generated config (user data, managed by the backend)
+backend/data-api/sheets.json
+backend/data-api/hidden_sheets.json
+
+# Lock files (optional — remove these lines if your team prefers to commit lock files)
+package-lock.json
+
+# Vite
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
