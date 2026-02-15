@@ -15,7 +15,6 @@ const ProjectFilters = ({
   showAgencyFilter = true,
   showDepartmentFilter = true,
 }) => {
-  // Only show department filter if explicitly enabled AND there are departments
   const shouldShowDeptFilter = showDepartmentFilter && departments.length > 0;
   
   const clearAllFilters = () => {
@@ -47,7 +46,6 @@ const ProjectFilters = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Status Filter */}
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-1">Status</label>
           <div className="relative">
@@ -64,7 +62,6 @@ const ProjectFilters = ({
           </div>
         </div>
 
-        {/* Department Filter - only show if there are departments */}
         {shouldShowDeptFilter && (
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
@@ -84,7 +81,6 @@ const ProjectFilters = ({
           </div>
         )}
 
-        {/* Agency Filter (optional) */}
         {showAgencyFilter && agencies.length > 0 && (
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Funding Agency</label>
@@ -104,7 +100,6 @@ const ProjectFilters = ({
           </div>
         )}
 
-        {/* Items Per Page */}
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-1">Show</label>
           <div className="relative">
@@ -123,7 +118,6 @@ const ProjectFilters = ({
         </div>
       </div>
 
-      {/* Active Filter Chips */}
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
           {statusFilter !== 'all' && (

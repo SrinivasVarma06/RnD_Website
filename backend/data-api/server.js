@@ -6,32 +6,21 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
-// ─── Configuration ───────────────────────────────────────────────────────────
-
 const PORT = process.env.PORT || 5000;
 const REFRESH_MINUTES = parseInt(process.env.REFRESH_MINUTES) || 10;
-const FETCH_TIMEOUT = 60000; // 60 seconds per request (some sheets are large)
-const BATCH_SIZE = 5; // Concurrent fetches per batch
+const FETCH_TIMEOUT = 60000; 
+const BATCH_SIZE = 5;
 
-// Admin password — set via ADMIN_PASSWORD env var.
-// On first run, if not set, falls back to a default (change immediately in production).
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Rnd@IITDH2025';
-// Pre-hash at startup so we never compare plaintext
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_PASSWORD_HASH = bcrypt.hashSync(ADMIN_PASSWORD, 10);
 
-// ─── Persistent Sheet Config (sheets.json) ───────────────────────────────────
-
 const SHEETS_CONFIG_PATH = path.join(__dirname, 'sheets.json');
-
-// Session tokens for admin auth (in-memory; resets on server restart)
 const activeSessions = new Map();
 const crypto = require('crypto');
 
 function generateToken() {
   return crypto.randomBytes(32).toString('hex');
 }
-
-// ─── Dynamic Sheets Config (sheets.json) ─────────────────────────────────────
 
 function loadDynamicSheets() {
   try {
@@ -56,8 +45,6 @@ function mergeSources() {
   OPENSHEET_SOURCES = { ...DEFAULT_OPENSHEET_SOURCES, ...dynamic };
 }
 
-// ─── Hidden Sheets Config (hidden_sheets.json) ───────────────────────────────
-
 const HIDDEN_CONFIG_PATH = path.join(__dirname, 'hidden_sheets.json');
 
 function loadHiddenSheets() {
@@ -76,38 +63,24 @@ function saveHiddenSheets(hidden) {
   fs.writeFileSync(HIDDEN_CONFIG_PATH, JSON.stringify({ hidden, updatedAt: new Date().toISOString() }, null, 2), 'utf-8');
 }
 
-// ─── Default Google Sheet Sources (OpenSheet API) ────────────────────────────
-// These are the built-in sheets. Additional sheets can be added at runtime via
-// the admin API and are persisted in sheets.json.
 
 const DEFAULT_OPENSHEET_SOURCES = {
-  // Project data
   'sponsored':      { id: '1cVHmxJMGNPD_yGoQ4-_IASm1NYRfW1jpnozaR-PlB2o', sheet: 'Sheet1' },
   'consultancy':    { id: '1ET9vwdstPycSC1WUh4DwtHRg7_2axgYwZQgPVtqHfEQ', sheet: 'Sheet1' },
   'csr':            { id: '1aGpQlcEX4hw_L4nAhOxTC07KK0yXe0QqoKW3s7TRAaM', sheet: 'Sheet1' },
   'sgnf':           { id: '1JQ_9Xh9aPNnklv7_iP0ihVUztYd4Rs2ZnumybaJrf7c', sheet: 'Sheet1' },
-
-  // Publications & Patents
   'publications':   { id: '10P7vgxarVBixJkawH_SrFf3FaITKWeNLkc2rwPj0aoo', sheet: 'Sheet1' },
   'patents':        { id: '1GwrkMQ6uIeKmUU8yhEpZce-cTnGDcvNlj6KwYR6CrBE', sheet: 'Sheet1' },
-
-  // People & Administration
   'people':         { id: '1DPFcbQFTMe5AsEHycc25MDc-SlvfJhli8taVGR8mORU', sheet: 'json' },
   'deans':          { id: '1gcvBIaxeUtNLoqsTKuCZsxFWONsIF58kI8RtKyqJ7jk', sheet: 'Sheet1' },
   'carousel':       { id: '1vWcPPCIsbXw0O8zwvjXAkXn0Hg7zY0pUWwUCJ_jTkjc', sheet: 'Carousel Images' },
-
-  // Resources
   'opportunities':  { id: '1t352KbG0gFpu_QK7BVjBrcwLy5Kthq4JmHRy_AtVHUM', sheet: 'Sheet1' },
   'forms':          { id: '1zmpwBGzv6VtYhkiosMQfJ3YE3-8CNiGAUP0tiNEX_rU', sheet: 'Sheet1' },
   'documents':      { id: '1RG3VNFWNk8tnVrsNmk3-cf1Pko3lQIofwRyZonQmVg0', sheet: 'Sheet1' },
   'research-areas': { id: '1L4vUCsuD0Qn6UjloNVOMMmaMl37YaWIl2MFOZIMG5ps', sheet: 'Sheet1' },
-
-  // Committees
   'biosafety':      { id: '1eSLx7mpxl18s9tbPviwM4iTYCxNQSZOfe3S_Lf4gWn0', sheet: 'Sheet1' },
   'ethics':         { id: '1mpZ4L867iqx-47amKA8PVSdYpub2naAYmQ-mzFXYCNc', sheet: 'Sheet1' },
   'ipr':            { id: '14Xz-Gg74ERDRkFMT_ocq0NWsnRwMDUFSBb8ooZSduiQ', sheet: 'Sheet1' },
-
-  // Labs
   'lab-biosciences':  { id: '1veYDe_wJ4aeYOOi3I-sc3FWnWEHkl1h7et0gKuX_L3I', sheet: 'BSBE' },
   'lab-chemicaleng':  { id: '1HzVcvQzqZaF1Wdlv4e1mIOHbs4O4lLkNcGMWA4ubQNo', sheet: 'Chem Eng' },
   'lab-chemistry':    { id: '1WhxVoG-kv62pww7y_GY0LrkNi0YLyUNhxP1UOu6Tm9k', sheet: 'Chemistry' },
@@ -120,10 +93,7 @@ const DEFAULT_OPENSHEET_SOURCES = {
   'lab-physics':      { id: '1F4QnT9Uq8l-bW42DHLDG32yfkQpzAOjCLwf_ASadZ3o', sheet: 'Physics' },
 };
 
-// Mutable copy that gets merged with dynamic sheets from sheets.json
 let OPENSHEET_SOURCES = { ...DEFAULT_OPENSHEET_SOURCES };
-
-// ─── CSV Export Sources (Excel files that can't use OpenSheet) ────────────────
 
 const CSV_SOURCES = {
   'workshops': {
@@ -140,15 +110,11 @@ const CSV_SOURCES = {
   },
 };
 
-// ─── Google Doc Sources (HTML content) ───────────────────────────────────────
-
 const DOC_SOURCES = {
   'dean-message': {
     url: 'https://docs.google.com/document/d/1erNNTzZQF3MTEzao2Sr2hRA7wp_HwohI9Ah9yiAzjPU/export?format=html',
   },
 };
-
-// ─── In-Memory Cache ─────────────────────────────────────────────────────────
 
 const cache = new Map();
 
@@ -163,8 +129,6 @@ function setCacheEntry(name, data, error = null) {
 function getCacheEntry(name) {
   return cache.get(name) || null;
 }
-
-// ─── CSV Parsing ─────────────────────────────────────────────────────────────
 
 function parseCsvLine(line) {
   const result = [];
@@ -239,8 +203,6 @@ function sanitizeHeader(header) {
     .toLowerCase();
 }
 
-// ─── Fetch Functions ─────────────────────────────────────────────────────────
-
 async function fetchFromOpenSheet(id, sheet) {
   const urls = [
     `https://opensheet.elk.sh/${id}/${encodeURIComponent(sheet)}`,
@@ -281,8 +243,6 @@ async function fetchDocSource(config) {
   return res.data;
 }
 
-// ─── Refresh Logic ───────────────────────────────────────────────────────────
-
 async function refreshSheet(name) {
   try {
     let data;
@@ -300,7 +260,6 @@ async function refreshSheet(name) {
     return true;
   } catch (err) {
     console.error(`  ✗ ${name}: ${err.message}`);
-    // Keep stale data if available; only create empty entry if nothing cached
     if (!getCacheEntry(name)) {
       setCacheEntry(name, [], err.message);
     }
@@ -336,7 +295,6 @@ async function refreshAll() {
   let success = 0;
   let failed = 0;
 
-  // Fetch sheets in batches to avoid overwhelming APIs
   for (let i = 0; i < allSheetNames.length; i += BATCH_SIZE) {
     const batch = allSheetNames.slice(i, i + BATCH_SIZE);
     const results = await Promise.allSettled(
@@ -354,7 +312,6 @@ async function refreshAll() {
     });
   }
 
-  // Fetch document sources
   for (const name of Object.keys(DOC_SOURCES)) {
     const result = await refreshContent(name);
     if (result) {
@@ -369,8 +326,6 @@ async function refreshAll() {
   console.log(`[${new Date().toISOString()}] ✅ Refresh complete: ${success} success, ${failed} failed (${elapsed}s)\n`);
 }
 
-// ─── Express Server ──────────────────────────────────────────────────────────
-
 const app = express();
 
 app.use(cors({
@@ -379,12 +334,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// ─── Sheet Data Endpoint ─────────────────────────────────────────────────────
-
 app.get('/api/sheets/:name', async (req, res) => {
   const { name } = req.params;
-
-  // Try cache first
   const cached = getCacheEntry(name);
   if (cached && cached.data && (Array.isArray(cached.data) ? cached.data.length > 0 : true)) {
     res.set('X-Cache', 'HIT');
@@ -392,7 +343,6 @@ app.get('/api/sheets/:name', async (req, res) => {
     return res.json(cached.data);
   }
 
-  // If valid source but not cached, fetch on demand
   if (OPENSHEET_SOURCES[name] || CSV_SOURCES[name]) {
     console.log(`  Cache miss for "${name}", fetching on demand...`);
     const ok = await refreshSheet(name);
@@ -401,7 +351,6 @@ app.get('/api/sheets/:name', async (req, res) => {
       res.set('X-Cache', 'MISS');
       return res.json(entry.data);
     }
-    // If fetch failed but stale data exists, serve stale
     if (entry?.data && (Array.isArray(entry.data) ? entry.data.length > 0 : true)) {
       res.set('X-Cache', 'STALE');
       return res.json(entry.data);
@@ -411,8 +360,6 @@ app.get('/api/sheets/:name', async (req, res) => {
 
   return res.status(404).json({ error: `Unknown sheet: "${name}"` });
 });
-
-// ─── Content Endpoint (HTML documents) ───────────────────────────────────────
 
 app.get('/api/content/:name', async (req, res) => {
   const { name } = req.params;
@@ -436,8 +383,6 @@ app.get('/api/content/:name', async (req, res) => {
   return res.status(404).json({ error: `Unknown content: "${name}"` });
 });
 
-// ─── Health Check ────────────────────────────────────────────────────────────
-
 app.get('/api/health', (req, res) => {
   const sheets = {};
   for (const [name, entry] of cache.entries()) {
@@ -458,8 +403,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ─── Force Refresh ───────────────────────────────────────────────────────────
-
 app.post('/api/refresh', async (req, res) => {
   const { name } = req.body || {};
 
@@ -477,7 +420,6 @@ app.post('/api/refresh', async (req, res) => {
   res.json({ success: true, message: 'All data refreshed', cachedEntries: cache.size });
 });
 
-// ─── List Available Sheets ───────────────────────────────────────────────────
 
 app.get('/api/sheets', (req, res) => {
   const available = [
@@ -487,12 +429,10 @@ app.get('/api/sheets', (req, res) => {
   res.json({ sheets: available, content: Object.keys(DOC_SOURCES) });
 });
 
-// ─── Sheet Status (for dynamic sidebar visibility) ───────────────────────────
 
 app.get('/api/sheets-status', (req, res) => {
   const status = {};
 
-  // All opensheet + csv sources
   const allNames = [
     ...Object.keys(OPENSHEET_SOURCES),
     ...Object.keys(CSV_SOURCES),
@@ -504,7 +444,6 @@ app.get('/api/sheets-status', (req, res) => {
     status[name] = { hasData: records > 0, records };
   }
 
-  // Mark dynamic sheets
   const dynamic = loadDynamicSheets();
   for (const name of Object.keys(dynamic)) {
     if (status[name]) {
@@ -515,7 +454,6 @@ app.get('/api/sheets-status', (req, res) => {
     }
   }
 
-  // Mark hidden sheets
   const hiddenList = loadHiddenSheets();
   for (const name of hiddenList) {
     if (status[name]) {
@@ -526,19 +464,16 @@ app.get('/api/sheets-status', (req, res) => {
   res.json(status);
 });
 
-// ─── Admin Auth ──────────────────────────────────────────────────────────────
 
 function requireAdmin(req, res, next) {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token || !activeSessions.has(token)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-  // Refresh expiry on use
-  activeSessions.set(token, Date.now() + 30 * 60 * 1000); // 30 min
+  activeSessions.set(token, Date.now() + 30 * 60 * 1000);
   next();
 }
 
-// Clean up expired sessions every 5 minutes
 setInterval(() => {
   const now = Date.now();
   for (const [token, expiry] of activeSessions) {
@@ -558,7 +493,7 @@ app.post('/api/admin/login', async (req, res) => {
   }
 
   const token = generateToken();
-  activeSessions.set(token, Date.now() + 30 * 60 * 1000); // 30 min expiry
+  activeSessions.set(token, Date.now() + 30 * 60 * 1000);
   res.json({ token, expiresIn: '30m' });
 });
 
@@ -572,7 +507,6 @@ app.get('/api/admin/verify', requireAdmin, (req, res) => {
   res.json({ valid: true });
 });
 
-// ─── Admin: Dynamic Sheet Management ─────────────────────────────────────────
 
 app.post('/api/admin/sheets', requireAdmin, async (req, res) => {
   const { name, spreadsheetId, sheetTab, label, category, route, editUrl } = req.body || {};
@@ -581,7 +515,6 @@ app.post('/api/admin/sheets', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'name and spreadsheetId are required' });
   }
 
-  // Don't allow overwriting built-in sources
   if (DEFAULT_OPENSHEET_SOURCES[name] || CSV_SOURCES[name]) {
     return res.status(409).json({ error: `"${name}" is a built-in source and cannot be overwritten` });
   }
@@ -600,13 +533,11 @@ app.post('/api/admin/sheets', requireAdmin, async (req, res) => {
   saveDynamicSheets(dynamic);
   mergeSources();
 
-  // Fetch the new sheet data immediately
   const ok = await refreshSheet(name);
   const entry = getCacheEntry(name);
   const records = Array.isArray(entry?.data) ? entry.data.length : 0;
 
   if (!ok) {
-    // Sheet was saved but fetch failed — likely not published publicly
     return res.status(200).json({
       success: true,
       name,
@@ -640,10 +571,8 @@ app.delete('/api/admin/sheets/:name', requireAdmin, (req, res) => {
   saveDynamicSheets(dynamic);
   mergeSources();
 
-  // Remove from cache
   cache.delete(name);
 
-  // Also remove from hidden list if it was hidden
   let hidden = loadHiddenSheets();
   if (hidden.includes(name)) {
     hidden = hidden.filter(k => k !== name);
@@ -658,7 +587,6 @@ app.get('/api/admin/dynamic-sheets', requireAdmin, (req, res) => {
   res.json(dynamic);
 });
 
-// ─── Admin: Hide / Unhide Built-in Sheets from Sidebar ──────────────────────
 
 app.post('/api/admin/sheets/:name/hide', requireAdmin, (req, res) => {
   const { name } = req.params;
@@ -682,18 +610,15 @@ app.get('/api/admin/hidden-sheets', requireAdmin, (req, res) => {
   res.json(loadHiddenSheets());
 });
 
-// ─── Startup ─────────────────────────────────────────────────────────────────
 
 async function start() {
   console.log('╔═══════════════════════════════════════════════╗');
   console.log('║       R&D Website — Data API Server           ║');
   console.log('╚═══════════════════════════════════════════════╝');
 
-  // Load dynamic sheets from sheets.json and merge with defaults
   mergeSources();
   const dynamicCount = Object.keys(loadDynamicSheets()).length;
 
-  // Clean up stale hidden entries (sheets that no longer exist in any source)
   const allKnownKeys = new Set([
     ...Object.keys(OPENSHEET_SOURCES),
     ...Object.keys(CSV_SOURCES),
@@ -711,10 +636,8 @@ async function start() {
   console.log(`Refresh interval: ${REFRESH_MINUTES} minutes`);
   console.log('');
 
-  // Initial data fetch
   await refreshAll();
 
-  // Start server
   const server = app.listen(PORT, () => {
     console.log(`🚀 API server running at http://localhost:${PORT}`);
     console.log(`   Health: http://localhost:${PORT}/api/health`);
@@ -731,7 +654,6 @@ async function start() {
     throw err;
   });
 
-  // Periodic refresh
   setInterval(refreshAll, REFRESH_MINUTES * 60 * 1000);
 }
 

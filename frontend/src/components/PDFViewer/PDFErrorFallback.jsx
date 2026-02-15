@@ -1,7 +1,6 @@
 import React from 'react';
 
 const PDFErrorFallback = ({ pdfFile }) => {
-  // Ensure we have an absolute URL for the PDF
   const absolutePdfUrl = pdfFile.startsWith('http') 
     ? pdfFile 
     : `${window.location.origin}${pdfFile}`;

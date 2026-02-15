@@ -13,12 +13,10 @@ export default function Consultancy() {
   const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Filter states
   const [statusFilter, setStatusFilter] = useState('all');
   const [departmentFilter, setDepartmentFilter] = useState('all');
   const [agencyFilter, setAgencyFilter] = useState('all');
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -41,7 +39,6 @@ export default function Consultancy() {
     fetchData();
   }, []);
 
-  // Parse date helper (M-D-Y format for consultancy)
   function parseDateMDY(dateStr) {
     if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;
     const parts = dateStr.split(/[-./#]/);
@@ -53,7 +50,6 @@ export default function Consultancy() {
     return isNaN(date.getTime()) ? null : date;
   }
 
-  // Check if project is ongoing (duration is in months for consultancy)
   const isOngoing = useCallback((item) => {
     const sanctionDate = parseDateMDY(item["Sanction date"]);
     if (!sanctionDate) return true;
@@ -63,13 +59,11 @@ export default function Consultancy() {
     return endDate > new Date();
   }, []);
 
-  // Extract unique departments from Dept(s) column
   const departments = useMemo(() => {
     const depts = new Set();
     doc.forEach(item => {
       const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
       if (deptCol && deptCol.trim()) {
-        // Handle multiple departments separated by comma or slash
         deptCol.split(/[,\/]/).forEach(d => {
           const trimmed = d.trim();
           if (trimmed) depts.add(trimmed);
@@ -79,7 +73,6 @@ export default function Consultancy() {
     return Array.from(depts).sort();
   }, [doc]);
 
-  // Extract unique organizations
   const agencies = useMemo(() => {
     const agencySet = new Set();
     doc.forEach(item => {
@@ -89,7 +82,6 @@ export default function Consultancy() {
     return Array.from(agencySet).sort();
   }, [doc]);
 
-  // Filter and sort data
   const processedData = useMemo(() => {
     let filtered = [...doc];
 
@@ -134,7 +126,6 @@ export default function Consultancy() {
     return filtered;
   }, [doc, search, statusFilter, departmentFilter, agencyFilter, sortOrder, isOngoing]);
 
-  // Calculate statistics
   const stats = useMemo(() => {
     let totalValue = 0;
     let ongoingCount = 0;
@@ -150,7 +141,6 @@ export default function Consultancy() {
     return { totalValue, ongoingCount, completedCount, total: doc.length };
   }, [doc, isOngoing]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -178,7 +168,6 @@ export default function Consultancy() {
 
   return (
     <div className="max-w-[95%] mx-auto p-4" id="consultancy-top">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <Briefcase className="text-purple-700" size={36} />
@@ -187,7 +176,6 @@ export default function Consultancy() {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Industry collaboration and consulting engagements</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-5">
           <p className="text-base md:text-lg text-gray-600 font-medium">Total Projects</p>
@@ -207,7 +195,6 @@ export default function Consultancy() {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -219,7 +206,6 @@ export default function Consultancy() {
         />
       </div>
 
-      {/* Filters */}
       <ProjectFilters
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
@@ -233,7 +219,6 @@ export default function Consultancy() {
         setItemsPerPage={setItemsPerPage}
       />
 
-      {/* Results Count & Sort */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-600">
           Showing {processedData.length} of {doc.length} projects
@@ -248,9 +233,7 @@ export default function Consultancy() {
         </select>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
-        {/* Mobile scroll hint */}
         <p className="sm:hidden text-center text-sm text-gray-500 py-2">← Scroll horizontally to see more →</p>
         <table className="min-w-full divide-y divide-gray-200 table-zebra">
           <thead className="bg-purple-800">
@@ -302,7 +285,6 @@ export default function Consultancy() {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

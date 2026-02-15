@@ -13,10 +13,8 @@ const Navbar = ({ closeMenu }) => {
         if (closeMenu) closeMenu();
     };
 
-    // Base classes for nav links
     const baseLinkClasses = "py-2.5 rounded-lg pl-4 font-medium block w-full transition-all duration-200";
     
-    // Function to generate class names based on active state
     const getLinkClasses = ({ isActive }) => 
       `${baseLinkClasses} ${isActive 
         ? 'bg-purple-50 text-purple-700 border-l-4 border-purple-600 pl-3' 
@@ -152,7 +150,6 @@ const Navbar = ({ closeMenu }) => {
                 </li>
                 )}
 
-                {/* Dynamic sheets added via Admin panel (only 'other' category shown here; projects/committees go into their dropdowns) */}
                 {status && Object.entries(status)
                     .filter(([, info]) => info.dynamic && info.hasData && (!info.category || info.category === 'other') && !info.hidden)
                     .map(([key, info]) => (

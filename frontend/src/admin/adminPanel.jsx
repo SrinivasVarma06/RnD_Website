@@ -5,7 +5,6 @@ import { useSheetStatus } from "../context/useSheetStatus";
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
-// Map admin link labels to their sheet cache keys (for hide/unhide sidebar visibility)
 const LABEL_TO_KEYS = {
   'People': ['people'],
   'Documents': ['documents'],
@@ -26,7 +25,6 @@ function parseSheetId(input) {
   if (!input) return '';
   const match = input.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
   if (match) return match[1];
-  // If it looks like a raw ID (no slashes), return as-is
   if (/^[a-zA-Z0-9_-]{20,}$/.test(input.trim())) return input.trim();
   return '';
 }
@@ -48,7 +46,6 @@ export default function AdminPanel({ onLogout }) {
   const [hiddenSheets, setHiddenSheets] = useState(new Set());
   const [refreshing, setRefreshing] = useState(false);
 
-  // Load dynamic sheets and hidden sheets on mount
   useEffect(() => {
     fetchDynamicSheets();
     fetchHiddenSheets();
@@ -112,7 +109,6 @@ export default function AdminPanel({ onLogout }) {
 
     try {
       const category = addForm.category;
-      // Determine route based on category
       let route = `/sheet/${key}`;
       if (category === 'projects') route = `/Projects/${key}`;
       else if (category === 'committees') route = `/Committees/${key}`;
@@ -147,7 +143,6 @@ export default function AdminPanel({ onLogout }) {
           type: 'success',
           text: `"${addForm.displayName.trim()}" registered successfully (${data.records} records). It will now appear in the sidebar.`,
         });
-        // Auto-hide the form after successful add
         setTimeout(() => {
           setShowAddSheet(false);
           setAddMessage(null);
@@ -257,7 +252,7 @@ export default function AdminPanel({ onLogout }) {
         </div>
       </div>
 
-      {/* ─── Add New Sheet Form ─────────────────────────────────────── */}
+
       {showAddSheet && (
         <div className="bg-white shadow-lg rounded-xl p-6 border border-purple-200 mb-6">
           <h2 className="text-lg font-semibold mb-2 text-purple-800">Add New Sheet</h2>
@@ -341,11 +336,8 @@ export default function AdminPanel({ onLogout }) {
         </div>
       )}
 
-      {/* ─── Dynamic Sheets (Added via Admin) ─────────────────────── */}
 
-      {/* ─── All Sheet Links (built-in + dynamic) ─────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Dynamic sheets first */}
         {Object.entries(dynamicSheets).map(([name, sheet]) => {
           const isHidden = hiddenSheets.has(name);
           return (
@@ -397,7 +389,6 @@ export default function AdminPanel({ onLogout }) {
           );
         })}
 
-        {/* Built-in sheets */}
         {ADMIN_LINKS.map((item) => {
           const keys = LABEL_TO_KEYS[item.label] || [];
           const hidden = keys.length > 0 && keys.every(k => hiddenSheets.has(k));
@@ -432,7 +423,6 @@ export default function AdminPanel({ onLogout }) {
               )}
             </div>
 
-            {/* GOOGLE SHEET */}
             {item.type === "sheet" && (
               <a
                 href={item.url}
@@ -444,7 +434,6 @@ export default function AdminPanel({ onLogout }) {
               </a>
             )}
 
-            {/* EXTERNAL LINK */}
             {item.type === "link" && (
               <a
                 href={item.url}
@@ -456,7 +445,6 @@ export default function AdminPanel({ onLogout }) {
               </a>
             )}
 
-            {/* GROUP (LABS) */}
             {item.type === "group" && (
               <>
                 <button

@@ -26,7 +26,6 @@ const MyDropdownNav = ({ closeMenu, sheetStatus }) => {
         if (closeMenu) closeMenu();
     };
 
-    // Define dropdown items with their routes and labels
     const items = [
       { route: '/Projects/Csr', label: 'CSR Projects' },
       { route: '/Projects/sgnf', label: 'SGNF' },
@@ -36,7 +35,6 @@ const MyDropdownNav = ({ closeMenu, sheetStatus }) => {
       { route: '/Projects/Workshops', label: 'Workshops' },
     ];
 
-    // Append dynamic sheets with category 'projects'
     if (sheetStatus) {
       Object.entries(sheetStatus)
         .filter(([, info]) => info.dynamic && info.hasData && info.category === 'projects' && !info.hidden)
@@ -45,9 +43,7 @@ const MyDropdownNav = ({ closeMenu, sheetStatus }) => {
         });
     }
 
-    // Filter to only visible items (built-in only; dynamic ones are always shown if hasData)
     const visibleItems = items.filter(item => {
-      // Dynamic items (already filtered by hasData above) are always visible
       if (sheetStatus) {
         const key = item.route.split('/').pop();
         const info = sheetStatus[key];
@@ -56,7 +52,6 @@ const MyDropdownNav = ({ closeMenu, sheetStatus }) => {
       return isRouteVisible(item.route, sheetStatus);
     });
 
-    // If no items have data, don't render the dropdown at all
     if (visibleItems.length === 0) return null;
 
     return (

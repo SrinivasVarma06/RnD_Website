@@ -33,7 +33,6 @@ export default function Documents() {
     loadData();
   }, [loadData]);
 
-  // Pagination calculations
   const totalPages = Math.ceil(docsData.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedDocs = docsData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -94,7 +93,6 @@ export default function Documents() {
             </table>
           </div>
 
-          {/* Pagination Controls */}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

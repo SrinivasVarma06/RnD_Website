@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Loading Skeleton for Carousel
 const CarouselSkeleton = () => (
   <div className="relative rounded-lg overflow-hidden shadow-md max-w-full bg-gray-200 animate-pulse">
     <div className="w-full h-[200px] md:h-[350px] flex items-center justify-center">
@@ -11,7 +10,6 @@ const CarouselSkeleton = () => (
         <span className="text-gray-400 text-sm">Loading images...</span>
       </div>
     </div>
-    {/* Skeleton indicators */}
     <div className="absolute z-30 flex -translate-x-1/2 space-x-2 bottom-4 left-1/2">
       {[1, 2, 3].map((_, index) => (
         <div key={index} className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-300" />
@@ -26,14 +24,11 @@ const CustomCarousel = ({ images }) => {
 
   useEffect(() => {
     if (images.length === 0) return;
-    
-    // Preload first image with timeout fallback
     const img = new Image();
     img.onload = () => setImagesLoaded(true);
-    img.onerror = () => setImagesLoaded(true); // Show anyway on error
+    img.onerror = () => setImagesLoaded(true);
     img.src = images[0];
     
-    // Timeout fallback - show carousel after 3 seconds even if image hasn't loaded
     const timeout = setTimeout(() => {
       setImagesLoaded(true);
     }, 3000);
@@ -50,14 +45,12 @@ const CustomCarousel = ({ images }) => {
     return () => clearInterval(timer);
   }, [images.length, imagesLoaded]);
 
-  // Show skeleton while loading
   if (images.length === 0 || !imagesLoaded) {
     return <CarouselSkeleton />;
   }
 
   return (
     <div className="relative rounded-lg overflow-hidden shadow-md max-w-full">
-      {/* Carousel wrapper */}
       <div className="relative overflow-hidden">
         {images.map((src, index) => (
           <div 
@@ -74,7 +67,6 @@ const CustomCarousel = ({ images }) => {
         ))}
       </div>
 
-      {/* Slider indicators */}
       <div className="absolute z-30 flex -translate-x-1/2 space-x-2 sm:space-x-3 rtl:space-x-reverse bottom-4 left-1/2">
         {images.map((_, index) => (
           <button
@@ -89,7 +81,6 @@ const CustomCarousel = ({ images }) => {
         ))}
       </div>
 
-      {/* Slider controls */}
       <button
         type="button"
         className="hidden sm:flex absolute top-0 left-0 z-30 items-center justify-center h-full px-2 sm:px-4 cursor-pointer group focus:outline-none"

@@ -12,11 +12,9 @@ export default function Fellowship() {
     const [search, setSearch] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
 
-    // Filter states
     const [statusFilter, setStatusFilter] = useState('all');
     const [departmentFilter, setDepartmentFilter] = useState('all');
 
-    // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -41,15 +39,12 @@ export default function Fellowship() {
         if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;
         const parts = dateStr.split(/[-./#]/);
         if (parts.length !== 3) return null;
-        // Try YMD format first
         let year = parseInt(parts[0], 10);
         let month = parseInt(parts[1], 10) - 1;
         let day = parseInt(parts[2], 10);
         if (year > 31) {
-            // YMD format
             return new Date(year, month, day);
         }
-        // Try DMY format
         day = parseInt(parts[0], 10);
         month = parseInt(parts[1], 10) - 1;
         year = parseInt(parts[2], 10);

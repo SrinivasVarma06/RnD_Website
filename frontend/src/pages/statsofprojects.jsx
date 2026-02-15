@@ -46,12 +46,9 @@ export default function Statsofprojects() {
     fetchAllData();
   }, [URLS.consultancy, URLS.csr, URLS.sgnf, URLS.sponsored]);
 
-  // Extract year from various date formats
   const extractYear = (dateStr) => {
     if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;
-    // Try YYYY-MM-DD
     if (/^\d{4}[-/#]/.test(dateStr)) return parseInt(dateStr.substring(0, 4));
-    // Try DD-MM-YYYY or MM-DD-YYYY
     const parts = dateStr.split(/[-/#.]/);
     if (parts.length === 3) {
       const last = parseInt(parts[2]);
@@ -62,20 +59,17 @@ export default function Statsofprojects() {
     return null;
   };
 
-  // Extract department from name like "Dr. Name (CSE)"
   const extractDept = (name) => {
     if (!name) return 'Other';
     const match = name.match(/\(([^)]+)\)/);
     return match ? match[1].trim() : 'Other';
   };
 
-  // Get value in lakhs
   const getValue = (item) => {
     const val = item["Value (₹1,00,000)"] || item["value_inr_lakh"] || item["Value"] || 0;
     return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
   };
 
-  // Funding by Year Chart Data
   const fundingByYear = useMemo(() => {
     const yearData = {};
     
@@ -99,7 +93,6 @@ export default function Statsofprojects() {
     return Object.values(yearData).sort((a, b) => a.year - b.year);
   }, [sponsoredData, consultancyData, csrData, sgnfData]);
 
-  // Projects count by Year
   const projectsByYear = useMemo(() => {
     const yearData = {};
     
@@ -122,7 +115,6 @@ export default function Statsofprojects() {
     return Object.values(yearData).sort((a, b) => a.year - b.year);
   }, [sponsoredData, consultancyData, csrData, sgnfData]);
 
-  // Projects by Department
   const projectsByDept = useMemo(() => {
     const deptData = {};
     
@@ -147,7 +139,6 @@ export default function Statsofprojects() {
       .slice(0, 10);
   }, [sponsoredData, consultancyData, csrData, sgnfData]);
 
-  // Project Type Distribution
   const projectTypeDistribution = useMemo(() => {
     const calcTotal = (data) => data.reduce((sum, item) => sum + getValue(item), 0);
     return [
@@ -158,7 +149,6 @@ export default function Statsofprojects() {
     ];
   }, [sponsoredData, consultancyData, csrData, sgnfData]);
 
-  // Top Funding Agencies
   const topAgencies = useMemo(() => {
     const agencyData = {};
     
@@ -175,7 +165,6 @@ export default function Statsofprojects() {
       .slice(0, 8);
   }, [sponsoredData]);
 
-  // Summary stats
   const summaryStats = useMemo(() => {
     const totalProjects = sponsoredData.length + consultancyData.length + csrData.length + sgnfData.length;
     const totalFunding = projectTypeDistribution.reduce((sum, p) => sum + p.value, 0);
@@ -197,7 +186,6 @@ export default function Statsofprojects() {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Dynamic visualization of research project data</p>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
           <p className="text-base md:text-lg text-gray-600 font-medium">Total Projects</p>
@@ -217,7 +205,6 @@ export default function Statsofprojects() {
         </div>
       </div>
 
-      {/* Chart 1: Funding by Year (Stacked Bar) */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-10">
         <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
           <TrendingUp className="text-purple-600" size={24} />
@@ -241,7 +228,6 @@ export default function Statsofprojects() {
         </ResponsiveContainer>
       </div>
 
-      {/* Chart 2: Number of Projects by Year */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           <Calendar className="text-purple-600" size={24} />
@@ -265,9 +251,7 @@ export default function Statsofprojects() {
         </ResponsiveContainer>
       </div>
 
-      {/* Row with Pie Chart and Department Chart */}
       <div className="grid md:grid-cols-2 gap-8 mb-8">
-        {/* Chart 3: Project Type Distribution */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <PieChartIcon className="text-purple-600" size={24} />
@@ -294,7 +278,6 @@ export default function Statsofprojects() {
           </ResponsiveContainer>
         </div>
 
-        {/* Chart 4: Projects by Department */}
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
             <Building2 className="text-purple-600" size={24} />
@@ -312,7 +295,6 @@ export default function Statsofprojects() {
         </div>
       </div>
 
-      {/* Chart 5: Top Funding Agencies */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           <IndianRupee className="text-purple-600" size={24} />
@@ -342,7 +324,6 @@ export default function Statsofprojects() {
         </ResponsiveContainer>
       </div>
 
-      {/* Data Summary Table */}
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Summary by Project Type</h2>
         <div className="overflow-x-auto">

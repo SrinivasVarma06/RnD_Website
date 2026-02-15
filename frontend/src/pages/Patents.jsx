@@ -16,9 +16,9 @@ const Patents = () => {
             try {
                 setLoading(true);
                 const res = await axios.get(getApiUrl('patents'));
-                setPatentData(res.data); // reverse for latest first, optional
+                setPatentData(res.data);
             } catch (error) {
-                console.error(error); // optional logging
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -37,17 +37,13 @@ const Patents = () => {
             if (!isNaN(parsedNumber)) {
             setNumber(parsedNumber);
             } else {
-            //setError(new Error(`Could not parse "${trimmedString}" as a number. Please ensure cell A1 contains only a number.`));
             setNumber(null);
             }
 
         } catch (err) {
             console.error("Failed to fetch number:", err);
-            // setError(new Error(`Failed to fetch data from Google Sheet: ${err.message || 'Network error'}. Check sheet permissions.`));
             setNumber(null);
-        } //finally {
-        //     setLoading(false); // Stop loading
-        // }
+        }
     };
 
     fetchNumber();
@@ -117,20 +113,6 @@ const Patents = () => {
                     </tbody>
                 </table>
             </div>
-
-                                    {/* Back to Top Button
-                                    <div className="cursor-pointer text-center mt-10">
-                                        <Link
-                                            to="patents-top"
-                                            spy={true}
-                                            smooth={true}
-                                            offset={-100}
-                                            duration={500}
-                                            className="inline-block bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300"
-                                        >
-                                            Back to Top
-                                        </Link>
-                                    </div> */}
         </div>
     )
 };

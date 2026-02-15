@@ -1,4 +1,3 @@
-// src/components/Topbar.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/institute-logo.png'
@@ -33,7 +32,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
     }
   }
 
-  // Keyboard shortcuts: "/" to focus search, "Escape" to close
   useEffect(() => {
     const handleKeyDown = (event) => {
       const activeElement = document.activeElement
@@ -41,7 +39,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
                        activeElement?.tagName === 'TEXTAREA' ||
                        activeElement?.isContentEditable
 
-      // "/" key - focus search (only if not already typing)
       if (event.key === '/' && !isTyping) {
         event.preventDefault()
         if (window.innerWidth >= 640) {
@@ -51,7 +48,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
         }
       }
 
-      // Escape key - close menus, blur inputs
       if (event.key === 'Escape') {
         setMobileSearchOpen(false)
         if (setMobileMenuOpen) setMobileMenuOpen(false)
@@ -63,7 +59,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [setMobileMenuOpen])
 
-  // Close mobile search when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
@@ -76,7 +71,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
 
   return (
     <header className="fixed top-0 left-0 right-0 backdrop-blur-sm py-2 px-4 sm:px-6 flex items-center justify-between shadow-sm z-50 h-[70px] transition-all duration-300" style={{ backgroundColor: '#89288f' }}>
-      {/* Mobile menu button and Logo */}
       <div className="flex items-center">
         <button
           className="sm:hidden flex items-center justify-center p-2 rounded-md text-white hover:text-gray-100 focus:outline-none mr-2"
@@ -93,7 +87,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
             </svg>
           )}
         </button>
-        {/* Default Logo (hidden on small screens) - with white background for visibility */}
         <div className="hidden sm:flex items-center bg-white rounded-lg p-1">
           <img
             src={logo}
@@ -102,7 +95,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
             className="cursor-pointer h-[38px] sm:h-[42px] md:h-[50px] w-auto transition-transform duration-200 hover:scale-[1.02]"
           />
         </div>
-        {/* Mobile Logo (visible only on small screens) - with white background */}
         <div className="flex sm:hidden items-center bg-white rounded-lg p-1">
           <img
             src="/institute_favicon.png"
@@ -113,7 +105,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
         </div>
       </div>
 
-      {/* Department name - centered on laptop+ screens */}
       <div className="flex-1 hidden sm:flex justify-center items-center">
         <h1
           onClick={()=> navigate('/')}
@@ -123,7 +114,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
         </h1>
       </div>
 
-      {/* Department name - mobile only - abbreviated */}
       <div className="flex sm:hidden flex-1 justify-center">
         <h1
           onClick={()=> navigate('/')}
@@ -133,7 +123,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
         </h1>
       </div>
 
-      {/* Desktop Search bar and Font Size Control */}
       <div className="hidden sm:flex items-center gap-3">
         <FontSizeControl />
         <div className="relative">
@@ -150,7 +139,6 @@ function Topbar({ toggleMobileMenu, isMobileMenuOpen, setMobileMenuOpen }) {
         </div>
       </div>
 
-      {/* Mobile Font Size Control & Search */}
       <div className="sm:hidden flex items-center gap-2" ref={mobileSearchRef}>
         <FontSizeControl />
         <div className={`flex items-center transition-all duration-300 ${mobileSearchOpen ? 'mr-2' : ''}`}>

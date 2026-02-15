@@ -29,7 +29,6 @@ const Ethics = ({ sheetStatus }) => {
       { route: '/Committees/ipr', label: 'IPR Committee' },
     ];
 
-    // Append dynamic sheets with category 'committees'
     if (sheetStatus) {
       Object.entries(sheetStatus)
         .filter(([, info]) => info.dynamic && info.hasData && info.category === 'committees' && !info.hidden)

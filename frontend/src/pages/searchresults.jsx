@@ -4,7 +4,6 @@ import searchData from '../searchData.jsx';
 import './searchresults.css';
 import PageHeader from '../components/PageHeader/PageHeader';
 
-// Helper to check if link is external
 const isExternalLink = (link) => link && (link.startsWith('http://') || link.startsWith('https://'));
 
 export default function Searchresults() {

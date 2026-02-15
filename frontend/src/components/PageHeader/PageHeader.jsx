@@ -1,12 +1,5 @@
 import React from 'react';
 
-/**
- * Reusable Page Header Component
- * @param {string} title - Main page title
- * @param {string} subtitle - Optional subtitle/description
- * @param {string} icon - Optional emoji or icon character
- * @param {boolean} gradient - Use gradient background (default: true)
- */
 const PageHeader = ({ title, subtitle, icon, gradient = true }) => {
   if (gradient) {
     return (

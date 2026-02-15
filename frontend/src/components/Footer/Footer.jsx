@@ -2,7 +2,6 @@ import React from 'react';
 import { Mail, Phone } from 'lucide-react';
 
 const Footer = () => {
-  // Projects - actual routes in the website
   const projectsLinks = [
     { name: 'Sponsored Projects', href: '/Projects/Sponsored' },
     { name: 'Consultancy Projects', href: '/Projects/Consultancy' },
@@ -12,7 +11,6 @@ const Footer = () => {
     { name: 'Workshops', href: '/Projects/Workshops' },
   ];
 
-  // Research & Publications
   const researchLinks = [
     { name: 'Research Areas', href: '/research-areas' },
     { name: 'Publications', href: '/publications' },
@@ -21,7 +19,6 @@ const Footer = () => {
     { name: 'IRINS', href: 'https://iitdh.irins.org/' },
   ];
 
-  // People - links to the R&D people page sections
   const peopleLinks = [
     { name: 'Dean', href: '/people#Dean' },
     { name: 'Associate Dean', href: '/people#AssociateDean' },
@@ -30,7 +27,6 @@ const Footer = () => {
     { name: 'Former Deans', href: '/people#Former-Deans' },
   ];
 
-  // Quick Access - split into 2 columns
   const quickAccessCol1 = [
     { name: 'Documents', href: '/documents' },
     { name: 'Forms', href: '/forms' },
@@ -82,7 +78,6 @@ const Footer = () => {
           overflowX: 'auto'
         }}>
           
-          {/* Institute Info */}
           <div style={{ flex: '0 0 auto', minWidth: '220px' }}>
             <h3 style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '18px', marginBottom: '14px', whiteSpace: 'nowrap' }}>
               INDIAN INSTITUTE OF<br />TECHNOLOGY DHARWAD
@@ -113,7 +108,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Projects Column */}
           <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>PROJECTS</h4>
             {projectsLinks.map((link) => (
@@ -129,7 +123,6 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* Research Column */}
           <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>RESEARCH</h4>
             {researchLinks.map((link) => (
@@ -145,7 +138,6 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* People Column */}
           <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>PEOPLE</h4>
             {peopleLinks.map((link) => (
@@ -159,7 +151,6 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* Quick Access - 2 columns */}
           <div style={{ flex: '0 0 auto' }}>
             <h4 style={headingStyle}>QUICK ACCESS</h4>
             <div style={{ display: 'flex', gap: '24px' }}>

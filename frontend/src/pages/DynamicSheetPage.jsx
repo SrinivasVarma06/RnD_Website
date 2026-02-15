@@ -15,7 +15,6 @@ export default function DynamicSheetPage() {
   const [title, setTitle] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch the human-readable title from sheets-status
   useEffect(() => {
     async function fetchTitle() {
       try {
@@ -25,7 +24,6 @@ export default function DynamicSheetPage() {
           if (status[sheetKey]?.label) {
             setTitle(status[sheetKey].label);
           } else {
-            // Fallback: convert key to title case
             setTitle(sheetKey.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()));
           }
         }
@@ -36,7 +34,6 @@ export default function DynamicSheetPage() {
     fetchTitle();
   }, [sheetKey]);
 
-  // Fetch sheet data
   const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -81,10 +78,8 @@ export default function DynamicSheetPage() {
     );
   }
 
-  // Get column headers from the first row, filter out empty keys
   const columns = Object.keys(data[0]).filter((col) => col.trim() !== '');
 
-  // Pagination
   const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const pageData = data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -126,7 +121,6 @@ export default function DynamicSheetPage() {
                   </td>
                   {columns.map((col) => {
                     const value = row[col] || '';
-                    // Auto-detect URLs and render as links
                     const isUrl = typeof value === 'string' && value.match(/^https?:\/\//);
                     return (
                       <td key={col} className="px-4 py-3 text-sm text-gray-700">

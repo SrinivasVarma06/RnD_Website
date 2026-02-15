@@ -1,4 +1,3 @@
-// App.jsx 
 import React, { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Topbar from './components/Topbar/Topbar';
@@ -12,7 +11,6 @@ import LabSubNavbar from './components/labnav';
 import AdminGate from "./admin/adminGate";
 import { SheetStatusProvider } from './context/SheetStatusContext';
 
-// Lazy load ALL pages for better code splitting
 const Home = lazy(() => import('./pages/Home'));
 const Forms = lazy(() => import('./pages/Forms'));
 const Statsofprojects = lazy(() => import('./pages/statsofprojects'));
@@ -51,7 +49,6 @@ const Feedback = lazy(() => import('./pages/feedback'));
 const Opportunities = lazy(() => import('./pages/Opportunities'));
 const DynamicSheetPage = lazy(() => import('./pages/DynamicSheetPage'));
 
-// ScrollToTop logic inside App.jsx
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -97,11 +94,9 @@ function App() {
         </div>
 
         <div className="w-full sm:pl-[220px] lg:pl-[250px] flex flex-col min-h-full">
-          {/* Breadcrumb Navigation */}
           <Breadcrumbs />
           
           <div key={location.pathname} className="max-w-full overflow-x-hidden flex-grow">
-            {/* Scroll restoration on route change */}
             <ScrollToTop />
             {isLabsPage && <LabSubNavbar />}
             <Suspense fallback={<PageSkeleton />}>
@@ -116,15 +111,12 @@ function App() {
                 <Route path="/deans" element={<Deans />} />
                 <Route path="/search" element={<Searchresults />} />
                 <Route path="/feedback" element={<Feedback />} />
-                {/* Documents route aliases for both /documents and /Documents */}
                 <Route path="/documents" element={<Documents />} />
                 <Route path="/Documents" element={<Documents />} />
-                {/* Statistics Pages */}
                 <Route path="/FundingStatistics" element={<Funding />} />
                 <Route path="/statistics/Office" element={<Office />} />
                 <Route path="/statistics/projects" element={<Statsofprojects />} />
                 <Route path="/statistics/publications" element={<Statsofpublications />} />
-                {/* Projects */}
                 <Route path="/Projects/Sponsored" element={<Sponsored />} />
                 <Route path="/Projects/Consultancy" element={<Consultancy />} />
                 <Route path="/Projects/Csr" element={<CSRP />} />
@@ -145,7 +137,6 @@ function App() {
                 <Route path="/Labs/chemicaleng" element={<Cheeng />} />
                 <Route path="/Labs/physics" element={<Phy />} />
                 <Route path="/Labs/mathematics" element={<Maths />} />
-                {/* Dynamic sheets added via Admin panel */}
                 <Route path="/sheet/:sheetKey" element={<DynamicSheetPage />} />
                 <Route path="/Projects/:sheetKey" element={<DynamicSheetPage />} />
                 <Route path="/Committees/:sheetKey" element={<DynamicSheetPage />} />

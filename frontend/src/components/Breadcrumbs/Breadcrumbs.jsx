@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 
-// Route name mapping for better display
 const routeNames = {
   '': 'Home',
   'people': 'People',
@@ -47,7 +46,6 @@ const Breadcrumbs = () => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
 
-  // Don't show breadcrumbs on home page
   if (pathnames.length === 0) {
     return null;
   }
@@ -58,7 +56,6 @@ const Breadcrumbs = () => {
       className="px-4 md:px-8 py-3 bg-white border-b border-gray-100 sticky top-[70px] z-30 shadow-sm"
     >
       <ol className="flex items-center flex-wrap gap-1 text-sm">
-        {/* Home link */}
         <li className="flex items-center">
           <Link 
             to="/" 
@@ -69,7 +66,6 @@ const Breadcrumbs = () => {
           </Link>
         </li>
 
-        {/* Path segments */}
         {pathnames.map((segment, index) => {
           const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;

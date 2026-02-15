@@ -44,16 +44,13 @@ const ResearchAreas = () => {
     fetchData();
   }, []);
 
-  // Extract unique departments
   const departments = useMemo(() => {
     return [...new Set(data.map((item) => item.Department).filter(Boolean))].sort();
   }, [data]);
 
-  // Filter and process data
   const processedData = useMemo(() => {
     let filtered = [...data];
 
-    // Search filter (name or research topic)
     if (search.length >= 2) {
       const searchLower = normalize(search);
       filtered = filtered.filter(item => {
@@ -65,7 +62,6 @@ const ResearchAreas = () => {
       });
     }
 
-    // Department filter
     if (departmentFilter !== 'all') {
       filtered = filtered.filter(item => item.Department === departmentFilter);
     }
@@ -73,7 +69,6 @@ const ResearchAreas = () => {
     return filtered;
   }, [data, search, departmentFilter]);
 
-  // Statistics
   const stats = useMemo(() => {
     const uniqueProfs = data.filter(d => d.ProfName).length;
     const uniqueDepts = new Set(data.map(d => d.Department).filter(Boolean)).size;
@@ -81,14 +76,12 @@ const ResearchAreas = () => {
     return { uniqueProfs, uniqueDepts, totalAreas };
   }, [data]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return processedData.slice(start, start + itemsPerPage);
   }, [processedData, currentPage, itemsPerPage]);
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, departmentFilter, itemsPerPage]);
@@ -106,7 +99,6 @@ const ResearchAreas = () => {
 
   return (
     <div className="max-w-[95%] mx-auto p-4" id="research-top">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <BookOpen className="text-purple-700" size={36} />
@@ -115,7 +107,6 @@ const ResearchAreas = () => {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Faculty members and their areas of research interest</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
           <div className="flex items-center gap-3">
@@ -146,7 +137,6 @@ const ResearchAreas = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -158,10 +148,8 @@ const ResearchAreas = () => {
         />
       </div>
 
-      {/* Filters Row */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Department Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
             <select
@@ -176,7 +164,6 @@ const ResearchAreas = () => {
             </select>
           </div>
 
-          {/* Items Per Page */}
           <div>
             <label className="block text-sm font-medium text-gray-600 mb-1">Show per page</label>
             <select
@@ -191,7 +178,6 @@ const ResearchAreas = () => {
             </select>
           </div>
 
-          {/* Results Count */}
           <div className="flex items-end">
             <p className="text-sm text-gray-600 pb-2">
               Showing {processedData.length} of {data.length} entries
@@ -200,7 +186,6 @@ const ResearchAreas = () => {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-purple-800">
@@ -236,7 +221,6 @@ const ResearchAreas = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

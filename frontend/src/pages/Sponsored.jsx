@@ -13,12 +13,10 @@ export default function Sponsored() {
   const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Filter states
   const [statusFilter, setStatusFilter] = useState('all');
   const [departmentFilter, setDepartmentFilter] = useState('all');
   const [agencyFilter, setAgencyFilter] = useState('all');
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -41,7 +39,6 @@ export default function Sponsored() {
     fetchData();
   }, []);
 
-  // Parse date helper
   function parseDateDMY(dateStr) {
     if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;
     const parts = dateStr.split(/[-./]/);
@@ -53,7 +50,6 @@ export default function Sponsored() {
     return isNaN(date.getTime()) ? null : date;
   }
 
-  // Check if project is ongoing
   const isOngoing = useCallback((item) => {
     const sanctionDate = parseDateDMY(item["Sanction date"]);
     if (!sanctionDate) return true; // Assume ongoing if no date
@@ -63,13 +59,11 @@ export default function Sponsored() {
     return endDate > new Date();
   }, []);
 
-  // Extract unique departments from Dept(s) column
   const departments = useMemo(() => {
     const depts = new Set();
     doc.forEach(item => {
       const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
       if (deptCol && deptCol.trim()) {
-        // Handle multiple departments separated by comma or slash
         deptCol.split(/[,\/]/).forEach(d => {
           const trimmed = d.trim();
           if (trimmed) depts.add(trimmed);
@@ -79,7 +73,6 @@ export default function Sponsored() {
     return Array.from(depts).sort();
   }, [doc]);
 
-  // Extract unique agencies
   const agencies = useMemo(() => {
     const agencySet = new Set();
     doc.forEach(item => {
@@ -92,11 +85,9 @@ export default function Sponsored() {
     return Array.from(agencySet).sort();
   }, [doc]);
 
-  // Filter and sort data
   const processedData = useMemo(() => {
     let filtered = [...doc];
 
-    // Search filter
     if (search) {
       const searchLower = search.toLowerCase();
       filtered = filtered.filter(item =>
@@ -105,7 +96,6 @@ export default function Sponsored() {
       );
     }
 
-    // Status filter
     if (statusFilter !== 'all') {
       filtered = filtered.filter(item => {
         const ongoing = isOngoing(item);
@@ -113,7 +103,6 @@ export default function Sponsored() {
       });
     }
 
-    // Department filter
     if (departmentFilter !== 'all') {
       filtered = filtered.filter(item => {
         const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
@@ -121,7 +110,6 @@ export default function Sponsored() {
       });
     }
 
-    // Agency filter
     if (agencyFilter !== 'all') {
       filtered = filtered.filter(item => {
         const agency = item["Sponsoring Agency-Scheme"] || '';
@@ -129,7 +117,6 @@ export default function Sponsored() {
       });
     }
 
-    // Sort by date
     filtered.sort((a, b) => {
       const dateA = parseDateDMY(a["Sanction date"]);
       const dateB = parseDateDMY(b["Sanction date"]);
@@ -142,7 +129,6 @@ export default function Sponsored() {
     return filtered;
   }, [doc, search, statusFilter, departmentFilter, agencyFilter, sortOrder, isOngoing]);
 
-  // Calculate statistics
   const stats = useMemo(() => {
     let totalValue = 0;
     let ongoingCount = 0;
@@ -158,14 +144,12 @@ export default function Sponsored() {
     return { totalValue, ongoingCount, completedCount, total: doc.length };
   }, [doc, isOngoing]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return processedData.slice(start, start + itemsPerPage);
   }, [processedData, currentPage, itemsPerPage]);
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, statusFilter, departmentFilter, agencyFilter, itemsPerPage]);
@@ -187,7 +171,6 @@ export default function Sponsored() {
 
   return (
     <div className="max-w-[95%] mx-auto p-4" id="spon-top">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <TrendingUp className="text-purple-700" size={36} />
@@ -196,7 +179,6 @@ export default function Sponsored() {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Research projects funded by government and external agencies</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
           <p className="text-base md:text-lg text-gray-600 font-medium">Total Projects</p>
@@ -216,7 +198,6 @@ export default function Sponsored() {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -228,7 +209,6 @@ export default function Sponsored() {
         />
       </div>
 
-      {/* Filters */}
       <ProjectFilters
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
@@ -242,7 +222,6 @@ export default function Sponsored() {
         setItemsPerPage={setItemsPerPage}
       />
 
-      {/* Results Count & Sort */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-600">
           Showing {processedData.length} of {doc.length} projects
@@ -257,9 +236,7 @@ export default function Sponsored() {
         </select>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
-        {/* Mobile scroll hint */}
         <p className="sm:hidden text-center text-sm text-gray-500 py-2">← Scroll horizontally to see more →</p>
         <table className="min-w-full divide-y divide-gray-200 table-zebra">
           <thead className="bg-purple-800">
@@ -313,7 +290,6 @@ export default function Sponsored() {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

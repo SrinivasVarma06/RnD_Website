@@ -39,9 +39,7 @@ export default function Statsofpublications() {
     fetchAllData();
   }, [URLS.patents, URLS.publications]);
 
-  // Extract year from publication
   const extractYear = (item) => {
-    // Try Year column first
     const year = item["Year"] || item["year"] || item["Publication Year"];
     if (year) {
       const parsed = parseInt(year);
@@ -50,7 +48,6 @@ export default function Statsofpublications() {
     return null;
   };
 
-  // Publications by Year
   const publicationsByYear = useMemo(() => {
     const yearData = {};
     
@@ -65,7 +62,6 @@ export default function Statsofpublications() {
     return Object.values(yearData).sort((a, b) => a.year - b.year);
   }, [publicationsData]);
 
-  // Cumulative publications
   const cumulativePublications = useMemo(() => {
     let cumulative = 0;
     return publicationsByYear.map(item => {
@@ -76,7 +72,6 @@ export default function Statsofpublications() {
 
 
 
-  // Patents by Year
   const patentsByYear = useMemo(() => {
     const yearData = {};
     
@@ -86,7 +81,6 @@ export default function Statsofpublications() {
         const parsed = parseInt(year);
         if (parsed >= 2015 && parsed <= 2030) {
           if (!yearData[parsed]) yearData[parsed] = { year: parsed, filed: 0, granted: 0 };
-          // Check if patent is granted
           const status = (item["Status"] || item["status"] || '').toLowerCase();
           if (status.includes('grant')) {
             yearData[parsed].granted += 1;
@@ -102,7 +96,6 @@ export default function Statsofpublications() {
 
 
 
-  // Summary stats
   const summaryStats = useMemo(() => {
     return {
       totalPublications: publicationsData.length,
@@ -126,7 +119,6 @@ export default function Statsofpublications() {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Dynamic visualization of research publications and patents</p>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
           <div className="flex items-center gap-2 text-gray-500 text-sm md:text-base font-medium mb-1">
@@ -158,7 +150,6 @@ export default function Statsofpublications() {
         </div>
       </div>
 
-      {/* Chart 1: Publications by Year with Trend (Dual Y-Axes) */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           <TrendingUp className="text-purple-600" size={24} />
@@ -200,7 +191,6 @@ export default function Statsofpublications() {
 
 
 
-      {/* Chart 4: Patents by Year */}
       {patentsByYear.length > 0 && (
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -223,7 +213,6 @@ export default function Statsofpublications() {
         </div>
       )}
 
-      {/* Publications Yearly Summary Table with Pagination */}
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Yearly Summary</h2>
         <div className="overflow-x-auto">
@@ -264,7 +253,6 @@ export default function Statsofpublications() {
           </table>
         </div>
         
-        {/* Pagination Controls */}
         {cumulativePublications.length > YEARLY_PER_PAGE && (
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
             <p className="text-sm text-gray-600">

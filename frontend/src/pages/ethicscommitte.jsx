@@ -37,12 +37,10 @@ export default function Ethicscommitte() {
     fetchData();
   }, []);
 
-  // Extract unique roles
   const roles = useMemo(() => {
     return [...new Set(doc.map(item => item.role).filter(Boolean))].sort();
   }, [doc]);
 
-  // Filter data
   const processedData = useMemo(() => {
     let filtered = [...doc];
 
@@ -61,14 +59,12 @@ export default function Ethicscommitte() {
     return filtered;
   }, [doc, search, roleFilter]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return processedData.slice(start, start + itemsPerPage);
   }, [processedData, currentPage, itemsPerPage]);
 
-  // Reset page on filter change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, roleFilter, itemsPerPage]);
@@ -86,7 +82,6 @@ export default function Ethicscommitte() {
 
   return (
     <div className="max-w-[95%] mx-auto p-4" id="ethics-top">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <Shield className="text-purple-700" size={36} />
@@ -98,7 +93,6 @@ export default function Ethicscommitte() {
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
           <div className="flex items-center gap-3">
@@ -120,7 +114,6 @@ export default function Ethicscommitte() {
         </div>
       </div>
 
-      {/* Search */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -132,7 +125,6 @@ export default function Ethicscommitte() {
         />
       </div>
 
-      {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
@@ -171,7 +163,6 @@ export default function Ethicscommitte() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-purple-800">
@@ -203,7 +194,6 @@ export default function Ethicscommitte() {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

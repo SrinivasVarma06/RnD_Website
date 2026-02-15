@@ -45,7 +45,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPe
       </div>
 
       <div className="flex items-center gap-1">
-        {/* First Page */}
         <button
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
@@ -55,7 +54,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPe
           <ChevronsLeft size={18} />
         </button>
 
-        {/* Previous Page */}
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -65,7 +63,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPe
           <ChevronLeft size={18} />
         </button>
 
-        {/* Page Numbers */}
         <div className="flex items-center gap-1">
           {getPageNumbers().map((page, idx) => (
             page === '...' ? (
@@ -86,7 +83,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPe
           ))}
         </div>
 
-        {/* Next Page */}
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
@@ -96,7 +92,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, totalItems, itemsPe
           <ChevronRight size={18} />
         </button>
 
-        {/* Last Page */}
         <button
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}

@@ -8,7 +8,6 @@ export default function AdminGate() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // On mount, verify existing token
   useEffect(() => {
     adminVerify().then((valid) => {
       if (valid) setAuthorized(true);

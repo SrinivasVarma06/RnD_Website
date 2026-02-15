@@ -7,7 +7,6 @@ import PageSkeleton from '../components/LoadingSkeleton/PageSkeleton';
 import Deans from './Deans.jsx';
 import { getApiUrl } from '../config/api';
 
-// Navigation Card Component
 const NavCard = ({ title, icon, targetId }) => {
   return (
     <Link
@@ -29,7 +28,6 @@ const NavCard = ({ title, icon, targetId }) => {
   );
 };
 
-// Section Component
 const Section = ({ id, title, children }) => {
   return (
     <div id={id} className="py-10 scroll-mt-[100px]">
@@ -48,14 +46,11 @@ const SubSection = ({ title, children }) => {
   );
 };
 
-// Faculty Card Component
 
 const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
-  // console.log(JSON.stringify(title))
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col h-full
                     hover:shadow-lg cursor-pointer transition-shadow duration-300 ease-in-out">
-      {/* Image Section */}
       <div className="w-48 h-48 mx-auto mt-4 mb-2 bg-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
         {imageUrl ? (
           <img
@@ -81,7 +76,6 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
         )}
       </div>
 
-      {/* Text Section */}
       <div className="p-4 flex-grow">
         <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
         <p className="text-purple-600 font-medium">
@@ -105,7 +99,6 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
 
       </div>
 
-      {/* Contact Section */}
       <div className="p-4 bg-gray-50 border-t border-gray-100 space-y-1">
         {email && (
           <div className="flex items-center text-sm text-gray-700">
@@ -132,7 +125,7 @@ const FacultyCard = ({ name, title, imageUrl, expertise, email, website }) => {
 
 
 
-// Staff Card Component
+
 const StaffCard = ({ name, title, imageUrl, email }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col h-full
@@ -196,14 +189,13 @@ const OutStaffCard = ({ name }) => {
 
 
 
-// People Page Component
+
 const People = () => {
 
   const [allPeople, setAllPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Categorized lists (computed from allPeople)
   const Dean = allPeople.filter((p) => p.type === "dean");
   const AssociateDean = allPeople.filter((p) => p.type === "associateDean").sort((a,b) => a.name.localeCompare(b.name));
   const facultyMembers = allPeople.filter(
@@ -215,14 +207,6 @@ const People = () => {
   const outSourcedStaff = staffMembers.filter((p) => p.title.toLowerCase().includes("outsourced")).sort((a,b) => a.name.localeCompare(b.name));
 
   const staffMembersFiltered = staffMembers.filter((p) => !p.title.toLowerCase().includes("outsourced"));
-
-  // Update staffMembers to exclude outsourced
-  // console.log(staffMembersFiltered);
-
-  //console.log(outSourcedStaff);
-
-  // console.log("dean" + Dean);
-  // console.log("staff" + staffMembers)
 
   useEffect(() => {
     axios
@@ -249,13 +233,11 @@ const People = () => {
       });
   }, []);
 
-  // Optional: show loading state
   if (loading && allPeople.length === 0)
     return (
       <PageSkeleton />
     );
 
-  // Error box if fetch failed and no data
   if (error && allPeople.length === 0)
     return (
       <div className="flex flex-col items-center justify-center min-h-[40vh] bg-red-50 border border-red-200 rounded-lg shadow p-6 my-8 max-w-2xl mx-auto">
@@ -271,7 +253,6 @@ const People = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Page Title */}
       <div id="people-top" className="mb-10">
         <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-3">People</h1>
         <p className="text-gray-600 text-base md:text-lg">
@@ -279,7 +260,6 @@ const People = () => {
         </p>
       </div>
 
-      {/* Navigation Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12">
         <NavCard
           title="Dean"
@@ -308,7 +288,6 @@ const People = () => {
         />
       </div>
 
-      {/* Dean Section */}
       <Section id="Dean" title="Dean">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Dean.map((member) => (
@@ -317,7 +296,6 @@ const People = () => {
         </div>
       </Section>
 
-      {/* AssociateDean Section */}
       <Section id="AssociateDean" title="Associate Dean">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {AssociateDean.map((member) => (
@@ -326,7 +304,6 @@ const People = () => {
         </div>
       </Section>
 
-      {/* Faculty In-Charge Section */}
       <Section id="Faculty-In-Charge" title="Faculty In-Charge">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {facultyMembers.map((member) => (
@@ -335,7 +312,6 @@ const People = () => {
         </div>
       </Section>
 
-      {/* Staff Section */}
       <Section id="Staff" title="Staff">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {staffMembersFiltered.map((member) => (
@@ -351,7 +327,6 @@ const People = () => {
         </div>
       </Section>
 
-      {/* Former Deans Section */}
       <Section id="Former-Deans" title="Former Deans">
         <Deans />
       </Section>

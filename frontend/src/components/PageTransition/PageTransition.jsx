@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-/**
- * Wrapper component for smooth page transitions
- * Uses CSS transitions for fade effect without additional dependencies
- */
 const PageTransition = ({ children }) => {
   const location = useLocation();
   const [displayChildren, setDisplayChildren] = useState(children);

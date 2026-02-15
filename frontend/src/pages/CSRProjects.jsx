@@ -13,12 +13,10 @@ export default function CSR() {
   const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState('desc');
 
-  // Filter states
   const [statusFilter, setStatusFilter] = useState('all');
   const [departmentFilter, setDepartmentFilter] = useState('all');
   const [agencyFilter, setAgencyFilter] = useState('all');
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -38,7 +36,6 @@ export default function CSR() {
     fetchData();
   }, []);
 
-  // Parse date helper
   function parseDateDMY(dateStr) {
     if (!dateStr || dateStr.toLowerCase() === 'n/a') return null;
     const parts = dateStr.split(/[-.\/]/);
@@ -50,7 +47,6 @@ export default function CSR() {
     return isNaN(date.getTime()) ? null : date;
   }
 
-  // Check if project is ongoing
   function isOngoing(item) {
     const sanctionDate = parseDateDMY(item["Sanction date"]);
     if (!sanctionDate) return true;
@@ -60,22 +56,18 @@ export default function CSR() {
     return endDate > new Date();
   }
 
-  // Get column keys dynamically
   const columns = useMemo(() => {
     if (info.length === 0) return [];
     return Object.keys(info[0]);
   }, [info]);
 
-  // Extract unique departments from Dept(s) column
   const departments = useMemo(() => {
     const depts = new Set();
     info.forEach(item => {
-      // Check for Dept(s) column first, then try extracting from investigator
       const deptCol = item["Dept(s)"] || item["Department"] || item["Dept"] || '';
       if (deptCol && deptCol.trim()) {
         depts.add(deptCol.trim());
       } else {
-        // Fallback: try extracting from Investigator name
         const investigator = item["Investigator(s)"] || item["PI"] || '';
         const match = investigator.match(/\(([^)]+)\)/);
         if (match) depts.add(match[1].trim());
@@ -84,7 +76,6 @@ export default function CSR() {
     return Array.from(depts).sort();
   }, [info]);
 
-  // Extract unique sponsors/agencies
   const agencies = useMemo(() => {
     const agencySet = new Set();
     info.forEach(item => {
@@ -94,7 +85,6 @@ export default function CSR() {
     return Array.from(agencySet).sort();
   }, [info]);
 
-  // Filter and sort data
   const processedData = useMemo(() => {
     let filtered = [...info];
 
@@ -138,7 +128,6 @@ export default function CSR() {
     return filtered;
   }, [info, search, statusFilter, departmentFilter, agencyFilter, sortOrder, columns]);
 
-  // Calculate statistics
   const stats = useMemo(() => {
     let totalValue = 0;
     let ongoingCount = 0;
@@ -154,7 +143,6 @@ export default function CSR() {
     return { totalValue, ongoingCount, completedCount, total: info.length };
   }, [info]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -177,7 +165,6 @@ export default function CSR() {
 
   return (
     <div className="max-w-[95%] mx-auto p-4" id="csrProject-top">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <Target className="text-purple-700" size={36} />
@@ -186,7 +173,6 @@ export default function CSR() {
         <p className="text-gray-600 mt-3 text-base md:text-lg">Corporate Social Responsibility funded research initiatives</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-5">
           <p className="text-base md:text-lg text-gray-600 font-medium">Total Projects</p>
@@ -206,7 +192,6 @@ export default function CSR() {
         </div>
       </div>
 
-      {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -218,7 +203,6 @@ export default function CSR() {
         />
       </div>
 
-      {/* Filters */}
       <ProjectFilters
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
@@ -232,7 +216,6 @@ export default function CSR() {
         setItemsPerPage={setItemsPerPage}
       />
 
-      {/* Results Count & Sort */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-sm text-gray-600">
           Showing {processedData.length} of {info.length} projects
@@ -247,7 +230,6 @@ export default function CSR() {
         </select>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           {columns.length > 0 && (
@@ -301,7 +283,6 @@ export default function CSR() {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

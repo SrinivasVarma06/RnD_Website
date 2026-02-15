@@ -29,7 +29,6 @@ const useCountUp = (end, duration = 2000, start = 0) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       
-      // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const currentCount = Math.floor(startValue + (end - startValue) * easeOutQuart);
       
@@ -53,11 +52,9 @@ const useCountUp = (end, duration = 2000, start = 0) => {
   return count;
 };
 
-// Stat Card Component with enhanced hover effects
 const StatCard = ({ icon: Icon, label, value, subValue, color, isLoading }) => {
   const animatedValue = useCountUp(value, 1500);
   
-  // Get gradient colors based on border color
   const getGradient = () => {
     if (color.includes('purple')) return 'from-purple-50 to-white';
     if (color.includes('green')) return 'from-green-50 to-white';
@@ -105,7 +102,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
     try {
       setLoading(true);
 
-      // Fetch from Google Sheets (parallel)
       const [consultancyRes, sponsoredRes, csrRes, sgnfRes, publicationsRes, patentsRes] = await Promise.all([
         fetch(SHEETS.consultancy).then(r => r.json()).catch(() => []),
         fetch(SHEETS.sponsored).then(r => r.json()).catch(() => []),
@@ -115,28 +111,24 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         fetch(SHEETS.patents).then(r => r.json()).catch(() => []),
       ]);
 
-      // Calculate consultancy stats
       let consultancyValue = 0;
       consultancyRes.forEach(item => {
         const val = parseFloat(item["Value (₹1,00,000)"]) * 100000;
         if (!isNaN(val)) consultancyValue += val;
       });
 
-      // Calculate sponsored stats
       let sponsoredValue = 0;
       sponsoredRes.forEach(item => {
         const val = parseInt(item["Value (₹1,00,000)"]) * 100000;
         if (!isNaN(val)) sponsoredValue += val;
       });
 
-      // Calculate CSR stats
       let csrValue = 0;
       csrRes.forEach(item => {
         const val = parseFloat(item["Value (₹1,00,000)"]) * 100000;
         if (!isNaN(val)) csrValue += val;
       });
 
-      // Calculate SGNF stats
       let sgnfValue = 0;
       sgnfRes.forEach(item => {
         const val = parseFloat(item["Value (₹1,00,000)"]) * 100000;
@@ -177,7 +169,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <StatCard
           icon={Briefcase}
@@ -230,7 +221,6 @@ const StatisticsDashboard = ({ refreshInterval = 60000 }) => {
         />
       </div>
 
-      {/* Summary Banner */}
       <div className="max-w-7xl mx-auto">
         <div className="rounded-xl p-6 md:p-8 text-white shadow-lg" style={{ background: 'linear-gradient(to right, #7c3aed, #9333ea)' }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

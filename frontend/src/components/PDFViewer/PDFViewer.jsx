@@ -5,8 +5,6 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import PDFErrorFallback from './PDFErrorFallback';
 import './PDFViewer.css';
 
-// Set up the worker source for PDF.js
-// Use HTTPS for the worker to ensure it works in all environments
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const PDFViewer = ({ pdfFile }) => {
@@ -17,46 +15,38 @@ const PDFViewer = ({ pdfFile }) => {
   const [width, setWidth] = useState(null);
   const [useFallback, setUseFallback] = useState(false);
 
-  // Get the absolute URL for the PDF file
   const absolutePdfUrl = pdfFile.startsWith('http') 
     ? pdfFile 
     : `${window.location.origin}${pdfFile}`;
 
-  // Function to run after successful PDF load
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
     setLoading(false);
   }
 
-  // Function to handle document error
   function onDocumentLoadError(error) {
     console.error('Error loading PDF:', error);
     setLoading(false);
     setError(true);
-    // Switch to fallback on error
     setUseFallback(true);
   }
 
-  // Go to previous page
   function goToPreviousPage() {
     if (pageNumber > 1) {
       setPageNumber(pageNumber - 1);
     }
   }
 
-  // Go to next page
   function goToNextPage() {
     if (pageNumber < numPages) {
       setPageNumber(pageNumber + 1);
     }
   }
 
-  // Switch to fallback iframe view
   function switchToFallback() {
     setUseFallback(true);
   }
 
-  // Calculate container ref for responsive sizing
   const containerRef = React.useRef(null);
 
   useEffect(() => {
@@ -66,15 +56,12 @@ const PDFViewer = ({ pdfFile }) => {
       }
     };
 
-    // Initial width calculation
     updateWidth();
 
-    // Update width on resize
     window.addEventListener('resize', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  // Iframe Fallback View - Use object instead of iframe to prevent recursive loading
   if (useFallback) {
     return (
       <div className="pdf-viewer" ref={containerRef}>
@@ -121,7 +108,6 @@ const PDFViewer = ({ pdfFile }) => {
     );
   }
 
-  // Standard view with React-PDF
   if (error) {
     return <PDFErrorFallback pdfFile={absolutePdfUrl} />;
   }
@@ -152,8 +138,8 @@ const PDFViewer = ({ pdfFile }) => {
             pageNumber={pageNumber} 
             width={width ? Math.min(width, 800) : 600}
             className="shadow-md"
-            renderTextLayer={false} // Turn off text layer to improve performance
-            renderAnnotationLayer={false} // Turn off annotations to improve performance
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
             error={<PDFErrorFallback pdfFile={absolutePdfUrl} />}
           />
         </Document>

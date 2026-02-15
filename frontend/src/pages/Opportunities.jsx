@@ -10,11 +10,9 @@ const Opportunities = () => {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
 
-    // Filter states
     const [agencyFilter, setAgencyFilter] = useState('all');
     const [deadlineFilter, setDeadlineFilter] = useState('all');
 
-    // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -47,11 +45,9 @@ const Opportunities = () => {
         fetchOpportunities();
     }, []);
 
-    // Extract unique agencies
     const agencies = useMemo(() => {
         const agencySet = new Set();
         opportunities.forEach(item => {
-            // Handle the typo in the data (Agnecy instead of Agency)
             const agency = item.Agnecy || item.Agency || '';
             if (agency && agency.trim()) {
                 agencySet.add(agency.trim());
@@ -60,7 +56,6 @@ const Opportunities = () => {
         return Array.from(agencySet).sort();
     }, [opportunities]);
 
-    // Get deadline categories
     const getDeadlineCategory = (deadlineStr) => {
         if (!deadlineStr) return 'unknown';
         if (/rolling/i.test(deadlineStr)) return 'rolling';
@@ -77,11 +72,9 @@ const Opportunities = () => {
         return 'later';
     };
 
-    // Filter and search data
     const processedData = useMemo(() => {
         let filtered = [...opportunities];
 
-        // Search filter
         if (search) {
             const searchLower = search.toLowerCase();
             filtered = filtered.filter(item =>
@@ -90,7 +83,6 @@ const Opportunities = () => {
             );
         }
 
-        // Agency filter
         if (agencyFilter !== 'all') {
             filtered = filtered.filter(item => {
                 const agency = item.Agnecy || item.Agency || '';
@@ -98,7 +90,6 @@ const Opportunities = () => {
             });
         }
 
-        // Deadline filter
         if (deadlineFilter !== 'all') {
             filtered = filtered.filter(item => {
                 const category = getDeadlineCategory(item.Deadline);
@@ -109,14 +100,12 @@ const Opportunities = () => {
         return filtered;
     }, [opportunities, search, agencyFilter, deadlineFilter]);
 
-    // Pagination
     const totalPages = Math.ceil(processedData.length / itemsPerPage);
     const paginatedData = useMemo(() => {
         const start = (currentPage - 1) * itemsPerPage;
         return processedData.slice(start, start + itemsPerPage);
     }, [processedData, currentPage, itemsPerPage]);
 
-    // Reset page when filters change
     useEffect(() => {
         setCurrentPage(1);
     }, [search, agencyFilter, deadlineFilter, itemsPerPage]);
@@ -133,7 +122,6 @@ const Opportunities = () => {
 
     return (
         <div id='opportunities-top' className="max-w-[95%] mx-auto p-4">
-            {/* Header */}
             <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-6xl font-bold text-gray-800 flex items-center justify-center gap-3">
                     <Megaphone className="text-purple-700" size={36} />
@@ -142,7 +130,6 @@ const Opportunities = () => {
                 <p className="text-gray-600 mt-3 text-base md:text-lg">Explore upcoming funding opportunities and grant schemes</p>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-white rounded-lg shadow-md border border-gray-200 p-5 md:p-6">
                     <p className="text-base md:text-lg text-gray-600 font-medium">Total Opportunities</p>
@@ -172,7 +159,6 @@ const Opportunities = () => {
                 <div className="text-gray-500 text-center py-8">No current opportunities with upcoming deadlines.</div>
             ) : (
                 <>
-                    {/* Search Bar */}
                     <div className="relative mb-4">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input
@@ -184,7 +170,6 @@ const Opportunities = () => {
                         />
                     </div>
 
-                    {/* Filters */}
                     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2 text-gray-700">
@@ -203,7 +188,6 @@ const Opportunities = () => {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {/* Agency Filter */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-1">Funding Agency</label>
                                 <div className="relative">
@@ -221,7 +205,6 @@ const Opportunities = () => {
                                 </div>
                             </div>
 
-                            {/* Deadline Filter */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-1">Deadline</label>
                                 <div className="relative">
@@ -241,7 +224,6 @@ const Opportunities = () => {
                                 </div>
                             </div>
 
-                            {/* Items Per Page */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-600 mb-1">Show</label>
                                 <div className="relative">
@@ -260,7 +242,6 @@ const Opportunities = () => {
                             </div>
                         </div>
 
-                        {/* Active Filter Chips */}
                         {hasActiveFilters && (
                             <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
                                 {agencyFilter !== 'all' && (
@@ -286,14 +267,12 @@ const Opportunities = () => {
                         )}
                     </div>
 
-                    {/* Results Count */}
                     <div className="flex items-center justify-between mb-4">
                         <p className="text-sm text-gray-600">
                             Showing {processedData.length} of {opportunities.length} opportunities
                         </p>
                     </div>
 
-                    {/* Table */}
                     <div className="overflow-x-auto rounded-xl shadow-sm border border-gray-200">
                         <table className="min-w-full bg-white">
                             <thead className="bg-gray-100 border-b border-gray-300">
@@ -344,7 +323,6 @@ const Opportunities = () => {
                         </table>
                     </div>
 
-                    {/* Pagination */}
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}

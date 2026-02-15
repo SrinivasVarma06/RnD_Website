@@ -12,11 +12,9 @@ export default function Workshops() {
     const [search, setSearch] = useState('');
     const [sortOrder, setSortOrder] = useState('desc');
 
-    // Filter states
     const [statusFilter, setStatusFilter] = useState('all');
     const [departmentFilter, setDepartmentFilter] = useState('all');
 
-    // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 

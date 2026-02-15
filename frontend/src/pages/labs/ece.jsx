@@ -48,28 +48,6 @@ const SHEET_API_URL = getApiUrl('lab-ece')
     
 
 
-//     useEffect(()=>{
-//        const filtered = doc.filter(item =>
-//         [
-    
-//       item["Title"],
-//       item["Investigator(s)"],
-//       item["Co-PI"],
-//       item["Sponsoring Organization"],
-//       item["Value (₹1,00,000)"],
-//       item["Sanction date"],
-//       item["Duration (years)"]
-// ]       
-//           .join(" ")
-//           .toLowerCase()
-//           .includes(search.toLowerCase())
-//       );
-//       setfilteredDoc(filtered)
-//     // console.log(filtered)
-// },[search,doc])
-
-
-
     if (loading) {
         return (
             <PageSkeleton />
@@ -91,33 +69,6 @@ const SHEET_API_URL = getApiUrl('lab-ece')
               <Typography id="consultancy-top" variant="h5" fontWeight="bold" mb={3} align="center">
                
               </Typography>
-{/* 
-            <div className="bar">
-              <TextField
-                label="Search Consultancy Projects"
-                variant="outlined"
-                size="small"
-                className='searchfield'
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                sx={{ mb: 2 }}
-              />
-         
-              <FormControl className='formcontrol'  size="small" sx={{ mb: 3 }}>
-                <InputLabel id="sort-by-label">Sort by date</InputLabel>
-                <Select
-                  labelId="sort-by-label"
-                  id="sort-by"
-                  value={sortOrder}
-                  label="Sort by Sanction Date"
-                  onChange={(e) => setSortOrder(e.target.value)}
-                >
-                  <MenuItem value="asc">Oldest to Newest</MenuItem>
-                  <MenuItem value="desc">Newest to Oldest</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-               */}
         {doc.length!=0?(<div  id="research-and-documents-table">
             <div className="overflow-x-auto shadow-lg rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">

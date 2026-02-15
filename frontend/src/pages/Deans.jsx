@@ -26,12 +26,10 @@ const Deans = () => {
       });
   }, []);
 
-  // Extract unique designations
   const designations = useMemo(() => {
     return [...new Set(data.map(item => item.Designation).filter(Boolean))].sort();
   }, [data]);
 
-  // Filter data
   const processedData = useMemo(() => {
     let filtered = [...data];
 
@@ -49,14 +47,12 @@ const Deans = () => {
     return filtered;
   }, [data, search, designationFilter]);
 
-  // Pagination
   const totalPages = Math.ceil(processedData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return processedData.slice(start, start + itemsPerPage);
   }, [processedData, currentPage, itemsPerPage]);
 
-  // Reset page on filter change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, designationFilter, itemsPerPage]);
@@ -81,7 +77,6 @@ const Deans = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8 text-gray-800">
-      {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 flex items-center justify-center gap-3">
           <Award className="text-purple-700" size={32} />
@@ -92,7 +87,6 @@ const Deans = () => {
         </p>
       </div>
 
-      {/* Search */}
       <div className="relative mb-4 max-w-2xl mx-auto">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         <input
@@ -104,7 +98,6 @@ const Deans = () => {
         />
       </div>
 
-      {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 max-w-2xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
@@ -142,7 +135,6 @@ const Deans = () => {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead>
@@ -182,7 +174,6 @@ const Deans = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

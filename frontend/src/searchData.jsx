@@ -1,7 +1,4 @@
-// src/data/searchData.js
-
 const searchData = [
-  // Home Page
   {
     page: 'Home',
     title: 'Welcome to R&D Section',
@@ -24,7 +21,6 @@ const searchData = [
     link: '/'
   },
 
-  // People Page
   {
     page: 'People',
     title: 'Faculty & People',
@@ -54,7 +50,6 @@ const searchData = [
     link: '/deans'
   },
 
-  // Projects
   {
     page: 'Sponsored Projects',
     title: 'Sponsored Projects',
@@ -98,7 +93,6 @@ const searchData = [
     link: '/Projects/Workshops'
   },
 
-  // Documents Page
   {
     page: 'Documents',
     title: 'Office Memorandums',
@@ -128,7 +122,6 @@ const searchData = [
     link: '/documents'
   },
 
-  // Funding Page
   {
     page: 'Funding Statistics',
     title: 'Research Funding',
@@ -144,7 +137,6 @@ const searchData = [
     link: '/FundingStatistics'
   },
 
-  // Forms Page
   {
     page: 'Forms',
     title: 'R&D Forms',
@@ -153,7 +145,6 @@ const searchData = [
     link: '/forms'
   },
 
-  // Publications & Patents
   {
     page: 'Publications',
     title: 'Publications',
@@ -169,7 +160,6 @@ const searchData = [
     link: '/patents'
   },
 
-  // Call for Proposals
   {
     page: 'Call for Proposals',
     title: 'Call for Proposals',
@@ -178,7 +168,6 @@ const searchData = [
     link: '/opportunities'
   },
 
-  // Committees
   {
     page: 'Ethics Committee',
     title: 'Institutional Ethics Committee',
@@ -201,7 +190,6 @@ const searchData = [
     link: '/Committees/biosafety'
   },
 
-  // Research Areas
   {
     page: 'Research Areas',
     title: 'Research Areas',
@@ -209,8 +197,7 @@ const searchData = [
     displaycontent: 'Academics and Research Areas',
     link: '/research-areas'
   },
-  
-  // Labs
+
   {
     page: 'Labs',
     title: 'CSE Labs',
@@ -282,7 +269,6 @@ const searchData = [
     link: '/Labs/mathematics'
   },
 
-  // Feedback
   {
     page: 'Feedback',
     title: 'Feedback',
@@ -291,7 +277,6 @@ const searchData = [
     link: '/feedback'
   },
 
-  // CSR Donations
   {
     page: 'CSR Donations',
     title: 'CSR Donations',
